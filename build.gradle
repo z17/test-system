@@ -1,0 +1,49 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.2.RELEASE'
+        liquibaseCoreVersion = '3.5.3'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.liquibase:liquibase-core:${liquibaseCoreVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'war'
+    id 'io.franzbecker.gradle-lombok' version '1.6'
+    id 'org.liquibase.gradle' version '1.2.1'
+}
+
+apply plugin: 'spring-boot'
+
+springBoot {
+    mainClass 'test_system.AppConfig'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('com.google.code.gson:gson:2.6.2')
+    compile("org.liquibase:liquibase-core:${liquibaseCoreVersion}")
+
+    compile('org.springframework.boot:spring-boot-starter-web')
+//    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    compile('com.h2database:h2')
+
+    compile('commons-io:commons-io:2.5')
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
