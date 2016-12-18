@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet author="Maksim Iliukovich" id="2">
+    <changeSet author="Maksim Iliukovich" id="2124124124214">
         <insert tableName="work">
             <column name="name" value="Первая работа"/>
             <column name="description" value="Описание работы" />
@@ -36,6 +36,54 @@
             <column name="work_id" value="1" />
             <column name="description" value="Описание теста №1" />
         </insert>
-    </changeSet>
 
+        <insert tableName="question">
+            <column name="test_id" value="1" />
+            <column name="text" value="Сколько будет 3 + 2?" />
+            <column name="type" value="SINGLE" />
+        </insert>
+
+        <insert tableName="answer">
+            <column name="question_id" value="1" />
+            <column name="text" value="5" />
+            <column name="correct" value="true" />
+        </insert>
+
+        <insert tableName="answer">
+            <column name="question_id" value="1" />
+            <column name="text" value="2" />
+            <column name="correct" value="false" />
+        </insert>
+
+        <insert tableName="answer">
+            <column name="question_id" value="1" />
+            <column name="text" value="7" />
+            <column name="correct" value="false" />
+        </insert>
+
+
+        <insert tableName="question">
+            <column name="test_id" value="1" />
+            <column name="text" value="Сколько будет 5 + 4?" />
+            <column name="type" value="MULTIPLY" />
+        </insert>
+
+        <insert tableName="answer">
+            <column name="question_id" value="2" />
+            <column name="text" value="9" />
+            <column name="correct" value="true" />
+        </insert>
+
+        <insert tableName="answer">
+            <column name="question_id" value="2" />
+            <column name="text" value="7" />
+            <column name="correct" value="false" />
+        </insert>
+
+        <insert tableName="answer">
+            <column name="question_id" value="2" />
+            <column name="text" value="девять" />
+            <column name="correct" value="true" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>

@@ -3,6 +3,7 @@ package test_system.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -15,9 +16,11 @@ public class TestEntity {
     @Column(name = "work_id", nullable = false)
     private Long workId;
 
-
     @Column(name = "description", nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<QuestionEntity> questions;
 
     public Long getId() {
         return id;
@@ -29,5 +32,9 @@ public class TestEntity {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
     }
 }

@@ -1,8 +1,10 @@
 package test_system.service;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_system.entity.WorkEntity;
+import test_system.exception.NotFoundException;
 import test_system.repository.WorkRepository;
 
 import java.util.List;
@@ -22,6 +24,12 @@ public class WorkService {
     }
 
     public WorkEntity getWork(final long id) {
-        return workRepository.findOne(id);
+        val work = workRepository.findOne(id);
+
+        if (work == null) {
+            throw new NotFoundException("Work not found");
+        }
+
+        return work;
     }
 }
