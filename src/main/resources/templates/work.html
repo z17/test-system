@@ -1,14 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-</head>
+<th:block th:include="header"/>
 <body th:inline="text">
-
-<h1>Информация о работе: [[${work.name}]]</h1>
-<p th:text="${work.description}">Description</p>
-<a th:href="@{'/work/' + ${work.id}} + '/theory'">Начать</a>
+<div class="wrapper">
+    <th:block th:include="menu"/>
+    <div class="content">
+        <h1>Информация о работе: [[${work.name}]]</h1>
+        <p th:text="${work.description}">Description</p>
+        <a th:href="@{'/work/' + ${work.id}} + '/theory'">Начать</a>
+    </div>
+</div>
 </body>
 </html>

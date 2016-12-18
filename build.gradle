@@ -22,7 +22,7 @@ plugins {
 apply plugin: 'spring-boot'
 
 springBoot {
-    mainClass 'test_system.AppConfig'
+    mainClass 'test_system.App'
 }
 
 sourceCompatibility = 1.8

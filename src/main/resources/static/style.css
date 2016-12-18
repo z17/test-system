@@ -1,0 +1,22 @@
+body {
+    background: #fafafa;
+}
+
+.wrapper {
+    width: 1000px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+.header {
+    padding: 30px;
+    border-bottom: 1px #f0f0f0 solid;
+}
+
+.header .logo {
+    font-size: 28px;
+}
+
+.content {
+    padding:10px 10px 30px 10px;
+}
