@@ -5,15 +5,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import test_system.AbstractTest;
-import test_system.entity.TestEntity;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 @Transactional
-public class TestServiceTest extends AbstractTest{
+public class TestServiceTest extends AbstractTest {
     @Autowired
     private TestService testService;
 

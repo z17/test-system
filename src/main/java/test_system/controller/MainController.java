@@ -49,4 +49,11 @@ public class MainController {
         return Template.TEST_PAGE_TEMPLATE;
     }
 
+    @RequestMapping(value = "/login")
+    public String login(@RequestParam(name = "error", required = false) final Object error, final Model model) {
+        if (error != null) {
+            model.addAttribute("loginError", true);
+        }
+        return Template.LOGIN_PAGE_TEMPLATE;
+    }
 }
