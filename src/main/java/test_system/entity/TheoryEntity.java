@@ -12,9 +12,21 @@ public class TheoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "task_id", nullable = false)
-    private Long taskId;
+    @Column(name = "work_id", nullable = false)
+    private Long workId;
 
     @Column(name = "text", nullable = false)
     private String text;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getWorkId() {
+        return workId;
+    }
+
+    public String getText() {
+        return text;
+    }
 }

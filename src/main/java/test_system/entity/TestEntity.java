@@ -1,19 +1,33 @@
 package test_system.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Data;
 
+import javax.persistence.*;
+
+@Data
+@Entity
+@Table(name = "test")
 public class TestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "task_id", nullable = false)
-    private Long taskId;
+    @Column(name = "work_id", nullable = false)
+    private Long workId;
 
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getWorkId() {
+        return workId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

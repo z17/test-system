@@ -5,12 +5,10 @@
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-<body>
+<body th:inline="text">
 
-Hello, world!
-<h1>Список задач</h1>
-<div th:each="work : ${works}">
-    <a th:href="@{'/work/' + ${work.id}}" th:text="${work.name}">Имя задачи</a>
-</div>
+<h1>Информация о работе: [[${work.name}]]</h1>
+<p th:text="${work.description}">Description</p>
+<a th:href="@{'/work/' + ${work.id}} + '/theory'">Начать</a>
 </body>
 </html>

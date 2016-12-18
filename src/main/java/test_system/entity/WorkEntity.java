@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="task")
-public class TaskEntity {
+@Table(name="work")
+public class WorkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
