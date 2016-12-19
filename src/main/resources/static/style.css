@@ -10,7 +10,7 @@ body {
 
 .header {
     padding: 30px;
-    border-bottom: 1px #f0f0f0 solid;
+    border-bottom: 1px #d0d0d0 solid;
 }
 
 .header .logo {
@@ -19,4 +19,11 @@ body {
 
 .content {
     padding:10px 10px 30px 10px;
+}
+
+.user {
+    margin: 5px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 22px;
 }

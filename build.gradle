@@ -25,15 +25,20 @@ springBoot {
     mainClass 'test_system.App'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+bootRun {
+    addResources = true
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile('com.google.code.gson:gson:2.6.2')
     compile("org.liquibase:liquibase-core:${liquibaseCoreVersion}")
 
     compile('org.springframework.boot:spring-boot-starter-web')

@@ -10,4 +10,5 @@ final class Template {
     static final String ERROR_TEMPLATE = "error";
 
     static final String LOGIN_PAGE_TEMPLATE = "login";
+    static final String USERS_PAGE_TEMPLATE = "users";
 }

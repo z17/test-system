@@ -9,6 +9,8 @@ import test_system.entity.Role;
 import test_system.entity.UserEntity;
 import test_system.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -27,7 +29,11 @@ public class UserService {
         userEntity.setName(user.getName());
         userEntity.setLogin(user.getLogin());
         userEntity.setPassword(bcryptEncoder.encode(user.getPassword()));
-        userEntity.setRole(Role.ROLE_USER);
+        userEntity.setRole(user.getRole());
         return userRepository.save(userEntity);
+    }
+
+    public List<UserEntity> usersPage() {
+        return (List<UserEntity>) userRepository.findAll();
     }
 }
