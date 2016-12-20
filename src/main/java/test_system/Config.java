@@ -10,8 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import test_system.service.CustomUserDetailService;
 
-@EnableJpaRepositories("test_system.repository")
 @Configuration
+@EnableJpaRepositories("test_system.repository")
 @EnableWebSecurity
 public class Config extends WebSecurityConfigurerAdapter {
 

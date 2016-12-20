@@ -1,7 +1,7 @@
 package test_system.entity;
 
 public enum Role {
-    ROLE_ADMIN("admin"), ROLE_USER("user");
+    ROLE_ADMIN("admin"), ROLE_USER("user"), ROLE_ANONYMOUS("anonym");
 
     final String name;
 
@@ -9,8 +9,8 @@ public enum Role {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
+    public String getName() {
         return name;
     }
+
 }

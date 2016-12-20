@@ -28,7 +28,7 @@
         <div class="user" th:each="user : ${users}">
             Имя: [[${user.name}]]<br/>
             Логин: [[${user.login}]]<br/>
-            Роль: [[${user.role}]]<br/>
+            Роль: [[${user.role.getName()}]]<br/>
         </div>
     </div>
 </div>
