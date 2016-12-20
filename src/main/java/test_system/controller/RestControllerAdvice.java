@@ -13,9 +13,10 @@ public class RestControllerAdvice {
     final String handle(final Exception exception, final Model model) {
         exception.printStackTrace();
 
+        model.addAttribute("reason", exception.getMessage());
+
         // todo: lets save template in class of exception by the custom annotations
         if (exception instanceof NotFoundException) {
-            model.addAttribute("reason", exception.getMessage());
             return Template.ERROR_404_TEMPLATE;
         }
 

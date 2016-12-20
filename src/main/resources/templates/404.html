@@ -1,11 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<th:block th:include="header"/>
+<th:block th:include="modules/header"/>
 <body th:inline="text">
 <div class="wrapper">
-    <th:block th:include="menu"/>
-    <h1>404 Error: [[${reason}]]</h1>
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>404 ошибка: [[${reason}]]</h1>
+    </div>
 </div>
 </body>
 </html>

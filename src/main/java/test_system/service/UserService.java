@@ -43,9 +43,7 @@ public class UserService {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         boolean present = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .filter(Role.ROLE_ANONYMOUS.toString()::equals)
-                .findAny()
-                .isPresent();
+                .anyMatch(Role.ROLE_ANONYMOUS.toString()::equals);
 
         if (present) {
             return null;
