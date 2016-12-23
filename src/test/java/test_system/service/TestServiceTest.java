@@ -22,6 +22,6 @@ public class TestServiceTest extends AbstractTest {
 
         assertThat(testEntity.getQuestions(), is(not(empty())));
 
-        assertThat(testEntity.getQuestions().get(0).getAnswers(), is(not(empty())));
+        assertThat(testEntity.getQuestions().get(0).getQuestion().getAnswers(), is(not(empty())));
     }
 }

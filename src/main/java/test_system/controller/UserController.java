@@ -33,13 +33,12 @@ public class UserController extends AbstractController {
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String users(final Model model) {
         model.addAttribute("users", userService.usersPage());
-        model.addAttribute("user", new UserData());
         return run(Template.USERS_PAGE_TEMPLATE, model);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public String usersPost(@ModelAttribute final UserData userData, final Model model) {
-        userService.save(userData);
+    public String usersPost(@ModelAttribute final UserData data, final Model model) {
+        userService.save(data);
         return run(users(model), model);
     }
 }

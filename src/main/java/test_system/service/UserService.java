@@ -14,8 +14,6 @@ import test_system.entity.UserEntity;
 import test_system.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -36,6 +34,7 @@ public class UserService {
         userEntity.setLogin(user.getLogin());
         userEntity.setPassword(bcryptEncoder.encode(user.getPassword()));
         userEntity.setRole(user.getRole());
+
         return userRepository.save(userEntity);
     }
 

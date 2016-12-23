@@ -2,24 +2,23 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet author="Maksim Iliukovich" id="4">
-        <createTable tableName="work_execution">
+    <changeSet author="Maksim Iliukovich" id="5">
+        <createTable tableName="work_answer">
             <column autoIncrement="true" name="id" type="INT UNSIGNED">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id"  type="INT UNSIGNED">
+            <column name="answer_id" type="INT UNSIGNED">
                 <constraints nullable="false"/>
             </column>
-            <column name="work_id"  type="INT UNSIGNED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="phase" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="start_time" type="TIMESTAMP" defaultValue="NOW()">
-                <constraints nullable="false"/>
-            </column>
-            <column name="end_time" type="TIMESTAMP" />
         </createTable>
+
+        <addColumn tableName="work_execution">
+            <column name="correct_questions" type="INT UNSIGNED">
+                <constraints nullable="true"/>
+            </column>
+            <column name="questions" type="INT UNSIGNED">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

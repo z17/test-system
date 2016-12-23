@@ -10,6 +10,7 @@ import test_system.exception.NotFoundException;
 import test_system.repository.WorkExecutionRepository;
 import test_system.repository.WorkRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -42,7 +43,31 @@ public class WorkService {
         return work;
     }
 
-    public void startWork(final long workId) {
+    WorkExecutionEntity workProcess(final long workId, final WorkPhase requestPhase) {
+        WorkExecutionEntity workExecution = getProcessingWork(workId);
+
+        WorkPhase currentPhase = workExecution != null ? workExecution.getPhase() : null;
+        if (!WorkPhase.isTransitionAccess(currentPhase, requestPhase)) {
+            throw new RuntimeException("Access is denied");
+        }
+
+        if (workExecution == null) {
+            return startWork(workId);
+        }
+
+        workExecution.setPhase(requestPhase);
+        return workExecutionRepository.save(workExecution);
+    }
+
+
+    WorkExecutionEntity finishTest(final WorkExecutionEntity work, final int correctAmount, final int allAmount) {
+        work.setCorrectQuestionsAmount(correctAmount);
+        work.setQuestionsAmount(allAmount);
+        work.setEndTime(new Timestamp(System.currentTimeMillis()));
+        return workExecutionRepository.save(work);
+    }
+
+    private WorkExecutionEntity startWork(final long workId) {
         val user = userService.getCurrentUser();
         val work = workRepository.findOne(workId);
 
@@ -50,30 +75,33 @@ public class WorkService {
             throw new NotFoundException("Work not found");
         }
 
+        val currentExecutions = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
+        if (!currentExecutions.isEmpty()) {
+            if (currentExecutions.size() > 1) {
+                throw new RuntimeException("Unknown Error");
+            }
 
-
-        val currentExecution = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
-        if (currentExecution != null) {
-            throw new RuntimeException("Some work already started");
+            val currentExecution = currentExecutions.get(0);
+            if (!currentExecution.getWork().equals(work) || currentExecution.getPhase() != WorkPhase.THEORY) {
+                throw new RuntimeException("Some work already started");
+            } else {
+                return currentExecution;
+            }
         }
 
         val execution = new WorkExecutionEntity();
         execution.setUser(user);
         execution.setWork(work);
         execution.setPhase(WorkPhase.THEORY);
-        workExecutionRepository.save(execution);
+        return workExecutionRepository.save(execution);
     }
 
-    public WorkExecutionEntity getProcessingWork(final long workId) {
+    private WorkExecutionEntity getProcessingWork(final long workId) {
         val user = userService.getCurrentUser();
         val work = workRepository.findOne(workId);
         if (work == null) {
             throw new NotFoundException("Work not found");
         }
-        return workExecutionRepository.findByUserAndWork(user, work);
-    }
-
-    public WorkExecutionEntity updateWorkExecution(final WorkExecutionEntity workExecution) {
-        return workExecutionRepository.save(workExecution);
+        return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
 }

@@ -25,9 +25,16 @@ public class WorkExecutionEntity {
     @Enumerated(value = EnumType.STRING)
     private WorkPhase phase;
 
-    @Column(name = "start_time", insertable = false)
+    @Column(name = "start_time", insertable = false, updatable = false)
     private Timestamp startTime;
 
     @Column(name = "end_time")
     private Timestamp endTime;
+
+    @Column(name = "correct_questions")
+    private int correctQuestionsAmount;
+
+    @Column(name = "questions")
+    private int questionsAmount;
+
 }

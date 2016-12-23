@@ -1,10 +1,12 @@
-<div class="header" xmlns:th="http://www.thymeleaf.org">
+<div th:inline="text" class="header" xmlns:th="http://www.thymeleaf.org">
     <div class="logo">Система тестирования</div>
     <div class="menu">
         <a href="/" class="menu-item">Главная</a>
         <a href="/users" class="menu-item">Пользователи</a>
 
+
         <a th:if="${user} != null" href="/logout" class="menu-item right">Выход</a>
         <a th:if="${user} == null" href="/login" class="menu-item right">Вход</a>
+        <span th:if="${user} != null" class="menu-item right">Привет, [[${user.name}]]</span>
     </div>
 </div>

@@ -8,18 +8,20 @@
     <div class="content">
         <h1>Часть 2: Тест</h1>
         <div>[[${test.description}]]</div>
-        <form method="POST" action="/work/[[{$test.workId}]]/finish">
+        <form th:action="@{/work/{id}/finish(id=${test.workId})}" method="POST" class="form">
             <div class="questions">
                 <div class="questions" th:each="question : ${test.questions}">
                     <p>[[${question.text}]]</p>
                     <div th:each="answer: ${question.answers}">
                         <input th:type="${question.type == T(test_system.entity.QuestionType).SINGLE ? 'radio' : 'checkbox'}"
-                               type="radio" name="question-[[%{question.id}]]" value="[[${answer.id}]]"/>
+                               type="radio" th:name="'question-' + ${question.id}" th:value="${answer.id}"/>
                         [[${answer.text}]]
                     </div>
                 </div>
             </div>
-            <input type="submit" value="Закончить"/>
+            <div class="field">
+                <input type="submit" value="Закончить"/>
+            </div>
         </form>
     </div>
 </div>

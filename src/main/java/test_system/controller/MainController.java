@@ -46,11 +46,4 @@ public class MainController extends AbstractController {
         model.addAttribute("theory", theoryService.theoryPage(id));
         return run(Template.THEORY_PAGE_TEMPLATE, model);
     }
-
-    @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/work/{id}/test", method = RequestMethod.GET)
-    public String testPage(@PathVariable final long id, final Model model) {
-        model.addAttribute("test", testService.testPage(id));
-        return run(Template.TEST_PAGE_TEMPLATE, model);
-    }
 }
