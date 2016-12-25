@@ -6,7 +6,7 @@ import test_system.entity.Role;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserData {
+public final class UserData {
     private String name;
     private String login;
     private String password;

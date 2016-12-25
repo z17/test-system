@@ -3,7 +3,7 @@ package test_system.data;
 import lombok.Data;
 
 @Data
-public class TestResult {
+public final class TestResult {
     private int correctQuestionsNumber;
     private int questionsNumber;
 }

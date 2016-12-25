@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>Статистика</h1>
+        <ul th:each="work : ${works}">
+            <li class="work-name">
+                <a th:href="@{'/statistic/' + ${work.id}}" th:text="${work.name}">Имя задачи</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

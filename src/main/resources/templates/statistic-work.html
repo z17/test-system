@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>Статистика по работе: [[${statistic.name}]]</h1>
+        <p><b>Попыток:</b> [[${statistic.attempts}]]</p>
+        <p><b>Средний процент верных ответов:</b> [[${statistic.correctPercent}]] %</p>
+        <p><b>Среднее время выполнения:</b> [[${statistic.time}]] минут</p>
+        <p><b>Количество вопросов:</b> [[${statistic.questions.size()}]]</p>
+
+        <div class="question" th:each="question : ${statistic.questions}">
+            <div class="question-text">[[${question.text}]]</div>
+            <i th:if="${question.type == T(test_system.entity.QuestionType).SINGLE}">один вариант ответа</i>
+            <i th:if="${question.type == T(test_system.entity.QuestionType).MULTIPLY}">несколько вариантов ответа</i>
+
+            <div class="answers-list">
+                <div class="answer" th:classappend="${answer.correct} ? correct" th:each="answer : ${question.answers}">
+                    [[${answer.text}]] [[${answer.percent}]]%
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -12,4 +12,7 @@ final class Template {
 
     static final String LOGIN_PAGE_TEMPLATE = "login";
     static final String USERS_PAGE_TEMPLATE = "users";
+
+    static final String STATISTIC_MAIN_TEMPLATE = "statistic";
+    static final String STATISTIC_WORK_TEMPLATE = "statistic-work";
 }

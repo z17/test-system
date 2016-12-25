@@ -69,11 +69,7 @@ public class WorkService {
 
     private WorkExecutionEntity startWork(final long workId) {
         val user = userService.getCurrentUser();
-        val work = workRepository.findOne(workId);
-
-        if (work == null) {
-            throw new NotFoundException("Work not found");
-        }
+        val work = getWork(workId);
 
         val currentExecutions = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
         if (!currentExecutions.isEmpty()) {
@@ -98,10 +94,7 @@ public class WorkService {
 
     private WorkExecutionEntity getProcessingWork(final long workId) {
         val user = userService.getCurrentUser();
-        val work = workRepository.findOne(workId);
-        if (work == null) {
-            throw new NotFoundException("Work not found");
-        }
+        val work = getWork(workId);
         return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
 }

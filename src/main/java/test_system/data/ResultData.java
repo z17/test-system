@@ -6,7 +6,7 @@ import test_system.entity.WorkExecutionEntity;
 import java.util.concurrent.TimeUnit;
 
 @Data
-public class ResultData {
+public final class ResultData {
     private int questionsAmount;
     private int correctQuestionsAmount;
     private long duration;

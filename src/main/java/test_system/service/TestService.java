@@ -30,12 +30,17 @@ public class TestService {
         this.workAnswerRepository = workAnswerRepository;
     }
 
-    public TestEntity testPage(final long workId) {
+    TestEntity getTest(final long workId) {
         val test = testRepository.findByWorkId(workId);
 
         if (test == null) {
             throw new NotFoundException("Test not found");
         }
+        return test;
+    }
+
+    public TestEntity testPage(final long workId) {
+        val test = getTest(workId);
 
         workService.workProcess(workId, WorkPhase.TEST);
 
@@ -43,13 +48,11 @@ public class TestService {
     }
 
     public ResultData finishPage(final long workId, final MultiValueMap<String, String> testResultData) {
-        val test = testRepository.findByWorkId(workId);
+        val test = getTest(workId);
 
-        if (test == null) {
-            throw new NotFoundException("Test not found");
-        }
+        val workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
 
-        List<WorkAnswerEntity> answers = processTestResultData(testResultData);
+        final List<WorkAnswerEntity> answers = processTestResultData(workExecutionEntity, testResultData);
         workAnswerRepository.save(answers);
 
         List<Long> answerIds = answers.stream().map(WorkAnswerEntity::getAnswerId).collect(Collectors.toList());
@@ -64,17 +67,16 @@ public class TestService {
             }
         }
 
-        val workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
         val result = workService.finishTest(workExecutionEntity, correctQuestionCount, test.getQuestions().size());
         return new ResultData(result);
     }
 
-    private List<WorkAnswerEntity> processTestResultData(final MultiValueMap<String, String> testResultData) {
+    private List<WorkAnswerEntity> processTestResultData(final WorkExecutionEntity workExecution, final MultiValueMap<String, String> testResultData) {
         return testResultData.entrySet().stream()
                 .filter(v -> v.getKey().startsWith(QUESTION_PARAMETER_PREFIX))
                 .flatMap(v -> v.getValue().stream())
                 .map(Long::valueOf)
-                .map(WorkAnswerEntity::new)
+                .map(v -> new WorkAnswerEntity(workExecution, v))
                 .collect(Collectors.toList());
     }
 }
