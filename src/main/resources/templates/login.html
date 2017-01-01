@@ -11,11 +11,11 @@
         <form th:action="@{/login}" method="post" class="login-form form">
             <div class="field">
                 <label for="username" class="label">Логин:</label>
-                <input type="text" id="username" name="username" autofocus="autofocus"/>
+                <input type="text" id="username" name="username" autofocus="autofocus" required/>
             </div>
             <div class="field">
                 <label for="password" class="label">Пароль:</label>
-                <input type="password" id="password" name="password"/> <br/>
+                <input type="password" id="password" name="password" required/> <br/>
             </div>
             <input type="submit" value="Вход"/>
         </form>

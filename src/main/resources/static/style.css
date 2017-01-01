@@ -76,3 +76,40 @@ li.work-name {
 .answer.correct {
     color: #00a500;
 }
+
+.form.create-test .field label {
+    display: block;
+    width: 600px;
+}
+
+.form.create-test .field input[type=text] {
+    width: 600px;
+}
+
+.form.create-test .field textarea {
+    width: 600px;
+    height: 200px;
+}
+
+.form.create-test .answers {
+    margin-left:25px;
+}
+
+.form.create-test .add, .form.create-test .delete {
+    border: 1px solid #aaaaaa;
+    display: inline-block;
+    padding:4px 10px;
+    cursor: pointer;
+}
+
+.form.create-test .delete {
+    margin-left:10px;
+}
+
+.form.create-test .answers .field:first-child .deleteAnswer {
+    display: none;
+}
+
+.form.create-test .questions .question:first-child .deleteQuestion {
+    display: none;
+}

@@ -97,4 +97,8 @@ public class WorkService {
         val work = getWork(workId);
         return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
+
+    public Object create() {
+        return null;
+    }
 }

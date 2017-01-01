@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>Создать работу</h1>
+
+        <form action="/" method="POST" class="form create-test">
+
+            <div class="field">
+                <label for="title" class="label">Название:</label>
+                <input th:type="text" name="title" id="title" required/>
+            </div>
+
+            <div class="field">
+                <label for="description" class="label">Описание работы:</label>
+                <textarea name="description" id="description" required></textarea>
+            </div>
+
+            <div class="field">
+                <h2>Теория</h2>
+                <textarea name="theory" id="theory" required></textarea>
+            </div>
+
+            <h2>Тест</h2>
+
+            <div class="field">
+                <label for="test-description" class="label">Описание теста:</label>
+                <textarea name="test-description" id="test-description" required></textarea>
+            </div>
+
+            <ol class="questions">
+                <li class="question" data-id="1">
+                    <div class="field">
+                        <label class="label">Текст вопроса:</label>
+                        <input th:type="text" name="question-1" class="question-text" required/> <span
+                            class="delete deleteQuestion">-</span>
+                    </div>
+
+                    <div class="field">
+                        <input type="radio" name="question-type-1" class="question-type" value="radio" checked/> Один ответ
+                        <input type="radio" name="question-type-1" class="question-type" value="checkbox"/> Несколько ответов
+                    </div>
+
+                    <p>Ответы:</p>
+                    <ul class="answers">
+                        <li class="field answer" data-id="1">
+                            <input th:type="text" name="question-1-answer-1" required/> <input
+                                type="checkbox" name="question-1-answer-1-right"/> Верный? <span
+                                class="delete deleteAnswer">-</span>
+                        </li>
+                        <li class="add" id="addAnswer">+</li>
+                    </ul>
+                </li>
+
+                <div class="add" id="addQuestion">+</div>
+            </ol>
+
+            <input th:type="submit" />
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package test_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,15 +43,11 @@ public class TestController extends AbstractController {
         return run(Template.TEST_RESULT_PAGE_TEMPLATE, model);
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.POST)
-    public String test(@RequestParam(required = false) final Map<Object, List<Object>> data, final Model model) {
-        model.addAttribute("works", workService.getWorks());
-        return run(Template.MAIN_TEMPLATE, model);
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/work/create", method = RequestMethod.GET)
+    public String create(final Model model) {
+        model.addAttribute("work", workService.create());
+        return run(Template.WORK_CREATE_TEMPLATE, model);
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public String test2(final Model model) {
-        model.addAttribute("works", workService.getWorks());
-        return run(Template.MAIN_TEMPLATE, model);
-    }
 }

@@ -11,15 +11,15 @@
             <form th:action="@{/users}" method="POST" class="form">
                 <div class="field">
                     <label for="name" class="label">Имя:</label>
-                    <input type="text" name="name" id="name"/>
+                    <input type="text" name="name" id="name" required/>
                 </div>
                 <div class="field">
                     <label for="login" class="label">Логин:</label>
-                    <input type="text" name="login" id="login"/>
+                    <input type="text" name="login" id="login" required/>
                 </div>
                 <div class="field">
                     <label for="password" class="label">Пароль:</label>
-                    <input type="password" name="password" id="password"/>
+                    <input type="password" name="password" id="password" required/>
                 </div>
                 <div class="field">
                     <label for="role" class="label">Роль:</label>
