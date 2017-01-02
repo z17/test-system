@@ -17,10 +17,29 @@
             <i th:if="${question.type == T(test_system.entity.QuestionType).SINGLE}">один вариант ответа</i>
             <i th:if="${question.type == T(test_system.entity.QuestionType).MULTIPLY}">несколько вариантов ответа</i>
 
-            <div class="answers-list">
-                <div class="answer" th:classappend="${answer.correct} ? correct" th:each="answer : ${question.answers}">
+            <ul class="answers-list">
+                <li class="answer" th:classappend="${answer.correct} ? correct" th:each="answer : ${question.answers}">
                     [[${answer.text}]] [[${answer.percent}]]%
-                </div>
+                </li>
+            </ul>
+        </div>
+
+        <h2>Попытки</h2>
+        <div class="attempts">
+            <div class="attempt" th:each="attempt : ${statistic.attemptsList}">
+                <p>
+                    <b>Пользователь:</b> <a th:href="'/statistic/' +  ${attempt.work.id} + '/user/' + ${attempt.user.id}" th:text="${attempt.user.name}">Имя</a>
+                </p>
+                <p>
+                    <b>Время начала:</b> [[${#dates.format(attempt.startTime, 'dd MMM yyyy HH:mm')}]]
+                </p>
+                <p>
+                    <b>Время окончания</b> [[${#dates.format(attempt.endTime, 'dd MMM yyyy HH:mm')}]]
+                </p>
+                <p>
+                    <b>Количество верных ответов:</b> [[${attempt.correctQuestionsAmount * 100 /
+                    attempt.questionsAmount}]]
+                </p>
             </div>
         </div>
     </div>

@@ -4,18 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum  WorkPhase {
-    THEORY(),
-    TEST(THEORY),
+    THEORY("Теория"),
+    TEST("Тест", THEORY),
 //    LAB(TEST),
-    FINISHED(TEST);
+    FINISHED("Завершено", TEST);
 
+    private final String text;
     private final List<WorkPhase> sourcePhases;
 
     public List<WorkPhase> getSourcePhases() {
         return sourcePhases;
     }
 
-    WorkPhase(WorkPhase... from) {
+    WorkPhase(String text, WorkPhase... from)  {
+        this.text = text;
         sourcePhases = Arrays.asList(from);
     }
 
@@ -23,6 +25,9 @@ public enum  WorkPhase {
         return source == destination
                 || destination.getSourcePhases().contains(source)
                 || source == null && destination.getSourcePhases().size() == 0;
+    }
 
+    public String getText() {
+        return text;
     }
 }

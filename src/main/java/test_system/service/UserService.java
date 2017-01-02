@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import test_system.data.UserData;
 import test_system.entity.Role;
 import test_system.entity.UserEntity;
+import test_system.exception.NotFoundException;
 import test_system.repository.UserRepository;
 
 import java.util.List;
@@ -53,5 +54,15 @@ public class UserService {
 
     public List<UserEntity> usersPage() {
         return (List<UserEntity>) userRepository.findAll();
+    }
+
+    public UserEntity getUser(long userId) {
+        val user = userRepository.findOne(userId);
+
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+
+        return user;
     }
 }

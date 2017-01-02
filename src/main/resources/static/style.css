@@ -113,3 +113,8 @@ li.work-name {
 .form.create-test .questions .question:first-child .deleteQuestion {
     display: none;
 }
+
+.attempts .attempt {
+    margin: 10px 0;
+    border-bottom: 1px solid #aaa;
+}

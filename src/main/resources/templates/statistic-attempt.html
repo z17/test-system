@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h2>Работа: [[${data.attempt.work.name}]]</h2>
+        <p>
+            <b>Пользователь:</b> [[${data.attempt.user.name}]]
+        </p>
+        <p>
+            <b>Время начала:</b> [[${#dates.format(data.attempt.startTime, 'dd MMM yyyy HH:mm')}]]
+        </p>
+        <p>
+            <b>Время окончания</b> [[${#dates.format(data.attempt.endTime, 'dd MMM yyyy HH:mm')}]]
+        </p>
+        <p>
+            <b>Количество верных ответов:</b> [[${data.attempt.correctQuestionsAmount * 100 /
+            data.attempt.questionsAmount}]]
+        </p>
+
+        <a th:href="'/statistic/' +  ${data.attempt.work.id} + '/user/' + ${data.attempt.user.id}" >К попыткам пользователя</a>
+
+        <h2>Вопросы</h2>
+        <div class="question" th:each="question : ${data.questions}">
+            <div class="question-text">[[${question.text}]]</div>
+            <i th:if="${question.type == T(test_system.entity.QuestionType).SINGLE}">один вариант ответа</i>
+            <i th:if="${question.type == T(test_system.entity.QuestionType).MULTIPLY}">несколько вариантов ответа</i>
+
+            <ul class="answers-list">
+                <li class="answer" th:classappend="${answer.correct} ? correct" th:each="answer : ${question.answers}">
+                    [[${answer.text}]] <span th:if="${answer.selected}">[выбран]</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

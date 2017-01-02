@@ -15,5 +15,8 @@ final class Template {
 
     static final String STATISTIC_MAIN_TEMPLATE = "statistic";
     static final String STATISTIC_WORK_TEMPLATE = "statistic-work";
+    static final String STATISTIC_WORK_USER_TEMPLATE = "statistic-work-user";
+    static final String STATISTIC_ATTEMPT_TEMPLATE = "statistic-attempt";
+
     static final String WORK_CREATE_TEMPLATE = "work-create";
 }

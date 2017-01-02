@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>Попытки пользователя [[${data.user.name}]]</h1>
+        <h2>Работа: [[${data.work.name}]]</h2>
+        <div class="attempts">
+            <div class="attempt" th:each="attempt : ${data.attempts}">
+                <p>
+                    <b>Время начала:</b> [[${#dates.format(attempt.startTime, 'dd MMM yyyy HH:mm')}]]
+                </p>
+                <p>
+                    <b>Время окончания:</b> [[${#dates.format(attempt.endTime, 'dd MMM yyyy HH:mm')}]]
+                </p>
+                <p>
+                    <b>Фаза:</b> [[${attempt.phase.text}]]
+                </p>
+                <p th:if="${attempt.phase == T(test_system.entity.WorkPhase).FINISHED}">
+                    <b>Количество верных ответов:</b> [[${attempt.correctQuestionsAmount * 100 / attempt.questionsAmount}]]
+                </p>
+                <p><a th:href="@{'/statistic/attempt/' + ${attempt.id}}">Подробнее</a></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
