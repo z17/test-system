@@ -4,6 +4,8 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import test_system.data.AnswerData;
+import test_system.data.QuestionData;
 import test_system.data.ResultData;
 import test_system.data.TestResult;
 import test_system.entity.*;
@@ -78,5 +80,30 @@ public class TestService {
                 .map(Long::valueOf)
                 .map(v -> new WorkAnswerEntity(workExecution, v))
                 .collect(Collectors.toList());
+    }
+
+    void create(final long workId, final String testDescription, final List<QuestionData<AnswerData>> questions) {
+        val test = new TestEntity();
+        test.setWorkId(workId);
+        test.setDescription(testDescription);
+
+        final List<QuestionEntity> questionList = questions.stream().map(v -> {
+            final QuestionEntity question = new QuestionEntity();
+            question.setText(v.getText());
+            question.setType(v.getType());
+            question.setTest(test);
+
+            final List<AnswerEntity> answers = v.getAnswers().stream().map(a -> {
+                AnswerEntity answer = new AnswerEntity();
+                answer.setText(a.getText());
+                answer.setCorrect(a.isCorrect());
+                answer.setQuestion(question);
+                return answer;
+            }).collect(Collectors.toList());
+            question.setAnswers(answers);
+            return question;
+        }).collect(Collectors.toList());
+        test.setQuestions(questionList);
+        testRepository.save(test);
     }
 }

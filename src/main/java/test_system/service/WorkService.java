@@ -3,6 +3,8 @@ package test_system.service;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import test_system.data.WorkCreateData;
 import test_system.entity.WorkEntity;
 import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
@@ -14,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
+@Transactional
 public class WorkService {
 
     private final WorkRepository workRepository;
@@ -21,6 +24,12 @@ public class WorkService {
     private final WorkExecutionRepository workExecutionRepository;
 
     private final UserService userService;
+
+    @Autowired
+    private TheoryService theoryService;
+
+    @Autowired
+    private TestService testService;
 
     @Autowired
     public WorkService(final WorkRepository workRepository, WorkExecutionRepository workExecutionRepository, UserService userService) {
@@ -98,7 +107,14 @@ public class WorkService {
         return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
 
-    public Object create() {
-        return null;
+    public void createWork(final WorkCreateData data) {
+        WorkEntity work = new WorkEntity();
+        work.setName(data.getTitle());
+        work.setDescription(data.getDescription());
+        val createdWork = workRepository.save(work);
+
+        theoryService.create(createdWork.getId(), data.getTheory());
+
+        testService.create(createdWork.getId(), data.getTestDescription(), data.getQuestions());
     }
 }

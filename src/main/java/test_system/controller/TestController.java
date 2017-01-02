@@ -46,8 +46,7 @@ public class TestController extends AbstractController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/work/create", method = RequestMethod.GET)
     public String create(final Model model) {
-        model.addAttribute("work", workService.create());
+//        model.addAttribute("work", workService.create());
         return run(Template.WORK_CREATE_TEMPLATE, model);
     }
-
 }

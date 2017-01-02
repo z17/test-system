@@ -73,18 +73,18 @@ public class StatisticService {
         return new WorkUserStatistic(user, work, attempts);
     }
 
-    public AttemptData<AnswerData> getAttemptData(final long id) {
+    public AttemptData<AttemptAnswerData> getAttemptData(final long id) {
         val attempt = workExecutionService.get(id);
 
         val test = testService.getTest(attempt.getWork().getId());
         List<WorkAnswerEntity> answers = workAnswerRepository.findByWorkExecution(attempt);
 
-        List<QuestionData<AnswerData>> questions = new ArrayList<>();
+        List<QuestionData<AttemptAnswerData>> questions = new ArrayList<>();
         for (QuestionEntity question : test.getQuestions()) {
-            List<AnswerData> answersData = new ArrayList<>();
+            List<AttemptAnswerData> answersData = new ArrayList<>();
             for (AnswerEntity answer : question.getAnswers()) {
                 boolean selected = answers.stream().anyMatch(f -> f.getAnswerId().equals(answer.getId()));
-                answersData.add(new AnswerData(answer.getText(), answer.isCorrect(), selected));
+                answersData.add(new AttemptAnswerData(answer.getText(), answer.isCorrect(), selected));
             }
 
             questions.add(new QuestionData<>(question.getText(), question.getType(), answersData));

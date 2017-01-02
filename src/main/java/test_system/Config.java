@@ -35,7 +35,8 @@ public class Config extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")
-                .and().userDetailsService(customUserDetailService);
+                .and().userDetailsService(customUserDetailService)
+                .csrf().disable();
     }
 
     @Bean
