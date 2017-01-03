@@ -10,8 +10,16 @@
         <ul th:each="work : ${works}">
             <li class="work-name">
                 <a th:href="@{'/work/' + ${work.id}}" th:text="${work.name}">Имя задачи</a>
+                <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}"
+                   th:href="@{'/work/' + ${work.id} + '/edit' }" title="Редактировать"><img src="/img/edit.png"
+                                                                                            class="edit-icon"
+                                                                                            alt=""/></a>
+                <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}"
+                   th:href="@{'/work/' + ${work.id} + '/delete'}" title="Удалить"><img src="/img/delete.png"
+                                                                                       class="delete-icon" alt=""/></a>
             </li>
         </ul>
+        <a href="/work/create" th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}">Добавить работу</a>
     </div>
 
 </div>

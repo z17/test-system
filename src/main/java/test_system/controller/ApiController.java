@@ -18,9 +18,9 @@ public class ApiController {
         this.workService = workService;
     }
 
-    @RequestMapping(value = "/createWork", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateWork", method = RequestMethod.POST)
     public boolean createWork(@RequestBody final WorkCreateData data) {
-        workService.createWork(data);
+        workService.updateWork(data);
         return true;
     }
 }

@@ -40,7 +40,7 @@ public class StatisticService {
         double correctData = completedWorks.stream().map(v -> v.getCorrectQuestionsAmount() * 100 / v.getQuestionsAmount()).collect(Collectors.averagingDouble(v -> v));
         double time = completedWorks.stream().map(v -> v.getEndTime().getTime() - v.getStartTime().getTime()).collect(Collectors.averagingLong(v -> v));
         int timeInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(Math.round(time));
-        val test = testService.getTest(workId);
+        val test = testService.getTestByWorkId(workId);
 
         List<Long> answerIds = workAnswerRepository.findByWork(work).stream().map(WorkAnswerEntity::getAnswerId).collect(Collectors.toList());
         val workAttempts = completedWorks.size();
@@ -55,7 +55,7 @@ public class StatisticService {
                 answersData.add(new StatisticAnswerData(answer.getText(), answer.isCorrect(), percent));
             }
 
-            questionsData.add(new QuestionData<>(question.getText(), question.getType(), answersData));
+            questionsData.add(new QuestionData<>(question.getId(), question.getText(), question.getType(), answersData));
         }
 
         return new WorkStatisticData(work.getName(),
@@ -76,7 +76,7 @@ public class StatisticService {
     public AttemptData<AttemptAnswerData> getAttemptData(final long id) {
         val attempt = workExecutionService.get(id);
 
-        val test = testService.getTest(attempt.getWork().getId());
+        val test = testService.getTestByWorkId(attempt.getWork().getId());
         List<WorkAnswerEntity> answers = workAnswerRepository.findByWorkExecution(attempt);
 
         List<QuestionData<AttemptAnswerData>> questions = new ArrayList<>();
@@ -87,7 +87,7 @@ public class StatisticService {
                 answersData.add(new AttemptAnswerData(answer.getText(), answer.isCorrect(), selected));
             }
 
-            questions.add(new QuestionData<>(question.getText(), question.getType(), answersData));
+            questions.add(new QuestionData<>(question.getId(), question.getText(), question.getType(), answersData));
         }
 
         return new AttemptData<>(attempt, questions);

@@ -21,21 +21,36 @@ public class TheoryService {
         this.workService = workService;
     }
 
-    public TheoryEntity theoryPage(final long workId) {
+    TheoryEntity getTheoryByWorkId(final long workId) {
         val theory = theoryRepository.findByWorkId(workId);
 
         if (theory == null) {
             throw new NotFoundException("Theory not found");
         }
+        return theory;
+    }
+
+    public TheoryEntity theoryPage(final long workId) {
+        val theory = getTheoryByWorkId(workId);
 
         workService.workProcess(workId, WorkPhase.THEORY);
         return theory;
     }
 
-    public void create(final long createdWorkId, final String theory) {
+    void create(final long createdWorkId, final String theory) {
         final TheoryEntity theoryEntity = new TheoryEntity();
         theoryEntity.setText(theory);
         theoryEntity.setWorkId(createdWorkId);
         theoryRepository.save(theoryEntity);
+    }
+
+    void update(final long workId, final String theoryText) {
+        val theory = getTheoryByWorkId(workId);
+        theory.setText(theoryText);
+        theoryRepository.save(theory);
+    }
+
+    void deleteByWorkId(final long workId) {
+        theoryRepository.deleteByWorkId(workId);
     }
 }

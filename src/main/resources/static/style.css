@@ -77,44 +77,51 @@ li.work-name {
     color: #00a500;
 }
 
-.form.create-test .field label {
+.form.form-work .field label {
     display: block;
     width: 600px;
 }
 
-.form.create-test .field input[type=text] {
+.form.form-work .field input[type=text] {
     width: 600px;
 }
 
-.form.create-test .field textarea {
+.form.form-work .field textarea {
     width: 600px;
     height: 200px;
 }
 
-.form.create-test .answers {
+.form.form-work .answers {
     margin-left:25px;
 }
 
-.form.create-test .add, .form.create-test .delete {
+.form.form-work .add, .form.form-work .delete {
     border: 1px solid #aaaaaa;
     display: inline-block;
     padding:4px 10px;
     cursor: pointer;
 }
 
-.form.create-test .delete {
+.form.form-work .delete {
     margin-left:10px;
 }
 
-.form.create-test .answers .field:first-child .deleteAnswer {
+.form.form-work .answers .answer.field:only-of-type .deleteAnswer {
     display: none;
 }
 
-.form.create-test .questions .question:first-child .deleteQuestion {
+.form.form-work .questions .question:only-of-type .deleteQuestion {
     display: none;
 }
 
 .attempts .attempt {
     margin: 10px 0;
     border-bottom: 1px solid #aaa;
+}
+
+.edit-icon, .delete-icon {
+    width:15px;
+    height:15px;
+    vertical-align: middle;
+    margin: 0 5px;
 }

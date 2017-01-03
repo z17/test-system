@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test_system.data.WorkCreateData;
+import test_system.data.WorkData;
+import test_system.entity.TheoryEntity;
 import test_system.entity.WorkEntity;
 import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
@@ -107,14 +109,49 @@ public class WorkService {
         return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
 
-    public void createWork(final WorkCreateData data) {
+    public WorkEntity updateWork(final WorkCreateData data) {
+        if (data.getId() != null) {
+            return editWork(data);
+        }
+        return createWork(data);
+    }
+
+    public void delete(final long id) {
+        theoryService.deleteByWorkId(id);
+        testService.deleteByWorkId(id);
+        workRepository.delete(id);
+    }
+
+    public WorkData getWorkData(final long workId) {
+        return new WorkData(
+                getWork(workId),
+                theoryService.getTheoryByWorkId(workId),
+                testService.getTestByWorkId(workId)
+        );
+    }
+
+    private WorkEntity createWork(final WorkCreateData data) {
         WorkEntity work = new WorkEntity();
-        work.setName(data.getTitle());
+        work.setName(data.getName());
         work.setDescription(data.getDescription());
         val createdWork = workRepository.save(work);
 
         theoryService.create(createdWork.getId(), data.getTheory());
 
         testService.create(createdWork.getId(), data.getTestDescription(), data.getQuestions());
+        return createdWork;
+    }
+
+    private WorkEntity editWork(final WorkCreateData data) {
+        val work = getWork(data.getId());
+
+        work.setName(data.getName());
+        work.setDescription(data.getDescription());
+
+        theoryService.update(work.getId(), data.getTheory());
+        testService.update(work.getId(), data.getTestDescription(), data.getQuestions());
+
+        workRepository.save(work);
+        return work;
     }
 }

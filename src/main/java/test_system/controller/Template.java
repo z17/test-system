@@ -19,4 +19,6 @@ final class Template {
     static final String STATISTIC_ATTEMPT_TEMPLATE = "statistic-attempt";
 
     static final String WORK_CREATE_TEMPLATE = "work-create";
+    static final String DELETE_PAGE_TEMPLATE = "work-delete";
+    static final String EDIT_PAGE_TEMPLATE = "work-edit";
 }

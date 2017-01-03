@@ -2,30 +2,27 @@ package test_system.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import test_system.service.TestService;
 import test_system.service.TheoryService;
 import test_system.service.UserService;
 import test_system.service.WorkService;
 
 @Controller
-public class MainController extends AbstractController {
+public class WorkController extends AbstractController {
 
     private final WorkService workService;
 
     private final TheoryService theoryService;
 
-    private final TestService testService;
-
     @Autowired
-    public MainController(WorkService workService, TheoryService theoryService, TestService testService, UserService userService) {
+    public WorkController(WorkService workService, TheoryService theoryService, UserService userService) {
         super(userService);
         this.workService = workService;
         this.theoryService = theoryService;
-        this.testService = testService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -45,5 +42,19 @@ public class MainController extends AbstractController {
     public String theoryPage(@PathVariable final long id, final Model model) {
         model.addAttribute("theory", theoryService.theoryPage(id));
         return run(Template.THEORY_PAGE_TEMPLATE, model);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/work/{id}/delete", method = RequestMethod.GET)
+    public String delete(@PathVariable final long id, final Model model) {
+        workService.delete(id);
+        return run(Template.DELETE_PAGE_TEMPLATE, model);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/work/{id}/edit", method = RequestMethod.GET)
+    public String edit(@PathVariable final long id, final Model model) {
+        model.addAttribute("data", workService.getWorkData(id));
+        return run(Template.EDIT_PAGE_TEMPLATE, model);
     }
 }

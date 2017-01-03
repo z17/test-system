@@ -5,5 +5,7 @@ import test_system.entity.TestEntity;
 
 public interface TestRepository extends CrudRepository<TestEntity, Long> {
     TestEntity findByWorkId(final long workId);
+
+    void deleteByWorkId(final long workId);
 }
 

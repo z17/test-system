@@ -7,7 +7,6 @@ import org.springframework.util.MultiValueMap;
 import test_system.data.AnswerData;
 import test_system.data.QuestionData;
 import test_system.data.ResultData;
-import test_system.data.TestResult;
 import test_system.entity.*;
 import test_system.exception.NotFoundException;
 import test_system.repository.TestRepository;
@@ -15,6 +14,8 @@ import test_system.repository.WorkAnswerRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +33,7 @@ public class TestService {
         this.workAnswerRepository = workAnswerRepository;
     }
 
-    TestEntity getTest(final long workId) {
+    TestEntity getTestByWorkId(final long workId) {
         val test = testRepository.findByWorkId(workId);
 
         if (test == null) {
@@ -42,7 +43,7 @@ public class TestService {
     }
 
     public TestEntity testPage(final long workId) {
-        val test = getTest(workId);
+        val test = getTestByWorkId(workId);
 
         workService.workProcess(workId, WorkPhase.TEST);
 
@@ -50,7 +51,7 @@ public class TestService {
     }
 
     public ResultData finishPage(final long workId, final MultiValueMap<String, String> testResultData) {
-        val test = getTest(workId);
+        val test = getTestByWorkId(workId);
 
         val workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
 
@@ -105,5 +106,75 @@ public class TestService {
         }).collect(Collectors.toList());
         test.setQuestions(questionList);
         testRepository.save(test);
+    }
+
+    void deleteByWorkId(final long workId) {
+        testRepository.deleteByWorkId(workId);
+    }
+
+    void update(final Long workId, final String testDescription, final List<QuestionData<AnswerData>> questions) {
+        val test = getTestByWorkId(workId);
+        test.setDescription(testDescription);
+
+        Map<Long, QuestionData<AnswerData>> updatedQuestionDataMap = questions.stream()
+                .filter(v -> v.getId() != null)
+                .collect(Collectors.toMap(QuestionData::getId, Function.identity()));
+
+        final List<QuestionEntity> updatedQuestions = test.getQuestions().stream()
+                .filter(v -> updatedQuestionDataMap.containsKey(v.getId()))
+                .map(v -> {
+                    QuestionData<AnswerData> updatedData = updatedQuestionDataMap.get(v.getId());
+                    v.setText(updatedData.getText());
+                    v.setType(updatedData.getType());
+
+                    final Map<Long, AnswerData> updatedAnswersData = updatedData.getAnswers().stream()
+                            .filter(a -> a.getId() != null)
+                            .collect(Collectors.toMap(AnswerData::getId, Function.identity()));
+
+                    List<AnswerEntity> updatedAnswers = v.getAnswers().stream()
+                            .filter(a -> updatedAnswersData.containsKey(a.getId()))
+                            .map(a -> {
+                                AnswerData answerData = updatedAnswersData.get(a.getId());
+                                a.setText(answerData.getText());
+                                a.setCorrect(answerData.isCorrect());
+                                return a;
+                            }).collect(Collectors.toList());
+
+                    updatedAnswers.addAll(getNewAnswers(updatedData.getAnswers(), v));
+                    v.setAnswers(updatedAnswers);
+                    return v;
+                })
+                .collect(Collectors.toList());
+
+        updatedQuestions.addAll(getNewQuestions(test, questions));
+        test.setQuestions(updatedQuestions);
+        testRepository.save(test);
+    }
+
+    private List<QuestionEntity> getNewQuestions(final TestEntity test, final List<QuestionData<AnswerData>> questions) {
+        return questions.stream()
+                .filter(v -> v.getId() == null)
+                .map(v -> {
+                    final QuestionEntity question = new QuestionEntity();
+                    question.setText(v.getText());
+                    question.setType(v.getType());
+                    question.setTest(test);
+
+                    question.setAnswers(getNewAnswers(v.getAnswers(), question));
+                    return question;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<AnswerEntity> getNewAnswers(final List<AnswerData> answers, final QuestionEntity question) {
+        return answers.stream()
+                .filter(a -> a.getId() == null)
+                .map(a -> {
+                    AnswerEntity answer = new AnswerEntity();
+                    answer.setQuestion(question);
+                    answer.setText(a.getText());
+                    answer.setCorrect(a.isCorrect());
+                    return answer;
+                }).collect(Collectors.toList());
     }
 }

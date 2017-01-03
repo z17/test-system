@@ -13,7 +13,7 @@ public class QuestionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id")
     private TestEntity test;
 
@@ -24,7 +24,7 @@ public class QuestionEntity {
     @Enumerated(EnumType.STRING)
     private QuestionType type;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AnswerEntity> answers;
 
     public Long getId() {
