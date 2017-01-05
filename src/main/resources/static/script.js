@@ -1,25 +1,16 @@
 $(document).ready(function () {
-    // create/edit work
 
-    let deletedAnswers = [];
-    let deletedQuestions = [];
+    // create/edit work
 
     function deleteAnswer() {
         let answer = $(this).parent();
-        if (answer.data('id') != undefined) {
-            deletedAnswers.push(answer.data('id'));
-        }
         answer.remove();
     }
 
     function deleteQuestion() {
         let question = $(this).closest('.question');
-        if (question.data('id') != undefined) {
-            deletedQuestions.push(question.data('id'));
-        }
         question.remove();
     }
-
 
     function bindAnswerDelete(answer) {
         $(answer).find('.deleteAnswer').click(deleteAnswer);
@@ -41,6 +32,7 @@ $(document).ready(function () {
         newQuestion.removeClass('sample');
         bindAnswerDelete($(newQuestion).find('.answers .answer:first'));
         $(newQuestion).find('.answers .addAnswer').click(addAnswerFunction);
+        $(newQuestion).find('.question-type').attr('name', 'question-type-' + ($('ul.questions li.question').length + 1));
         newQuestion.insertAfter(questions.find('.question:last'));
     });
 

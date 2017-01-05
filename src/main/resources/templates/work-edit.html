@@ -28,27 +28,32 @@
 
             <div class="field">
                 <label for="test-description" class="label">Описание теста:</label>
-                <textarea name="test-description" id="test-description" th:text="${data.test.description}" required></textarea>
+                <textarea name="test-description" id="test-description" th:text="${data.test.description}"
+                          required></textarea>
             </div>
 
             <ol class="questions">
-                <li class="question" th:each="question : ${data.test.questions}" th:data-id="${question.id}">
+                <li class="question" th:each="question,id: ${data.test.questions}" th:data-id="${question.id}">
                     <div class="field">
                         <label class="label">Текст вопроса:</label>
                         <input th:type="text" class="question-text" th:value="${question.text}" required/> <span
                             class="delete deleteQuestion">-</span>
                     </div>
-
                     <div class="field">
-                        <input type="radio" class="question-type" value="SINGLE" th:checked="${question.type == T(test_system.entity.QuestionType).SINGLE}"/> Один ответ
-                        <input type="radio"  class="question-type" value="MULTIPLY" th:checked="${question.type == T(test_system.entity.QuestionType).MULTIPLY}"/> Несколько ответов
+                        <input type="radio" class="question-type" value="SINGLE"
+                               th:name="${'question-type-' + id.index}"
+                               th:checked="${question.type == T(test_system.entity.QuestionType).SINGLE}"/> Один ответ
+                        <input type="radio" class="question-type" value="MULTIPLY"
+                               th:name="${'question-type-' + id.index}"
+                               th:checked="${question.type == T(test_system.entity.QuestionType).MULTIPLY}"/> Несколько
+                        ответов
                     </div>
 
                     <p>Ответы:</p>
                     <ul class="answers">
                         <li class="field answer" th:each="answer : ${question.answers}" th:data-id="${answer.id}">
                             <input th:type="text" class="answer-field" th:value="${answer.text}" required/> <input
-                                type="checkbox" class="correct-field" th:checked="${answer.isCorrect()}" /> Верный? <span
+                                type="checkbox" class="correct-field" th:checked="${answer.isCorrect()}"/> Верный? <span
                                 class="delete deleteAnswer">-</span>
                         </li>
                         <div class="add addAnswer">+</div>
@@ -64,7 +69,7 @@
         <div style="display:none">
             <li class="field answer sample">
                 <input th:type="text" class="answer-field" required/> <input
-                    type="checkbox" class="correct-field" /> Верный? <span
+                    type="checkbox" class="correct-field"/> Верный? <span
                     class="delete deleteAnswer">-</span>
             </li>
 
@@ -77,14 +82,14 @@
 
                 <div class="field">
                     <input type="radio" class="question-type" value="SINGLE" checked/> Один ответ
-                    <input type="radio"  class="question-type" value="MULTIPLY" /> Несколько ответов
+                    <input type="radio" class="question-type" value="MULTIPLY"/> Несколько ответов
                 </div>
 
                 <p>Ответы:</p>
                 <ul class="answers">
                     <li class="field answer">
                         <input th:type="text" class="answer-field" required/> <input
-                            type="checkbox" class="correct-field" /> Верный? <span
+                            type="checkbox" class="correct-field"/> Верный? <span
                             class="delete deleteAnswer">-</span>
                     </li>
                     <div class="add addAnswer">+</div>
