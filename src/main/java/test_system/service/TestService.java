@@ -9,6 +9,8 @@ import test_system.data.QuestionData;
 import test_system.data.ResultData;
 import test_system.entity.*;
 import test_system.exception.NotFoundException;
+import test_system.repository.AnswerRepository;
+import test_system.repository.QuestionRepository;
 import test_system.repository.TestRepository;
 import test_system.repository.WorkAnswerRepository;
 
@@ -25,12 +27,16 @@ public class TestService {
     private final TestRepository testRepository;
     private final WorkService workService;
     private final WorkAnswerRepository workAnswerRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
     @Autowired
-    public TestService(TestRepository testRepository, WorkService workService, WorkAnswerRepository workAnswerRepository) {
+    public TestService(TestRepository testRepository, WorkService workService, WorkAnswerRepository workAnswerRepository, QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.testRepository = testRepository;
         this.workService = workService;
         this.workAnswerRepository = workAnswerRepository;
+        this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     TestEntity getTestByWorkId(final long workId) {
@@ -120,6 +126,8 @@ public class TestService {
                 .filter(v -> v.getId() != null)
                 .collect(Collectors.toMap(QuestionData::getId, Function.identity()));
 
+        removeQuestionAndAnswers(test.getQuestions(), questions);
+
         final List<QuestionEntity> updatedQuestions = test.getQuestions().stream()
                 .filter(v -> updatedQuestionDataMap.containsKey(v.getId()))
                 .map(v -> {
@@ -164,6 +172,26 @@ public class TestService {
                     return question;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private void removeQuestionAndAnswers(final List<QuestionEntity> currentQuestions, final List<QuestionData<AnswerData>> questions) {
+        final List<Long> updatedAnswersId = questions.stream()
+                .flatMap(v -> v.getAnswers().stream())
+                .map(AnswerData::getId)
+                .collect(Collectors.toList());
+        List<AnswerEntity> deletedAnswers = currentQuestions.stream()
+                .flatMap(v -> v.getAnswers().stream())
+                .filter(v -> !updatedAnswersId.contains(v.getId()))
+                .collect(Collectors.toList());
+        answerRepository.delete(deletedAnswers);
+
+        final List<Long> updatedQuestionsId = questions.stream()
+                .map(QuestionData::getId)
+                .collect(Collectors.toList());
+        List<QuestionEntity> deletedQuestions = currentQuestions.stream()
+                .filter(v -> !updatedQuestionsId.contains(v.getId()))
+                .collect(Collectors.toList());
+        questionRepository.delete(deletedQuestions);
     }
 
     private List<AnswerEntity> getNewAnswers(final List<AnswerData> answers, final QuestionEntity question) {
