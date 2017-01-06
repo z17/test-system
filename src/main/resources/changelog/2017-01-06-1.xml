@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="Maksim Iliukovich" id="7">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="work_execution"
+                                 constraintName="fk_work_execution_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_id"
+                                 baseTableName="work_execution"
+                                 constraintName="fk_work_execution_work"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work"/>
+
+        <addForeignKeyConstraint baseColumnNames="work_execution_id"
+                                 baseTableName="work_answer"
+                                 constraintName="fk_work_answer_work_execution"
+                                 referencedColumnNames="id"
+                                 referencedTableName="work_execution"/>
+
+        <addForeignKeyConstraint baseColumnNames="answer_id"
+                                 baseTableName="work_answer"
+                                 constraintName="fk_work_answer_answer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="answer"/>
+    </changeSet>
+</databaseChangeLog>

@@ -5,85 +5,111 @@
     <changeSet author="Maksim Iliukovich" id="2124124124214">
         <insert tableName="work">
             <column name="name" value="Первая работа"/>
-            <column name="description" value="Описание работы" />
+            <column name="description" value="Описание работы"/>
         </insert>
 
         <insert tableName="work">
             <column name="name" value="Вторая работа"/>
-            <column name="description" value="Описание работы" />
+            <column name="description" value="Описание работы"/>
         </insert>
-        
+
         <insert tableName="work">
             <column name="name" value="Третья работа"/>
-            <column name="description" value="Описание работы" />
+            <column name="description" value="Описание работы"/>
         </insert>
-        
+
         <insert tableName="theory">
-            <column name="work_id" value="1" />
+            <column name="work_id" value="1"/>
             <column name="text">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
+                massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede
+                justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+                consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
+                Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi
+                vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus
+                eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam
+                nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.
+                Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros
+                faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed
+                consequat, leo eget bibendum sodales, augue velit cursus nunc,
             </column>
         </insert>
 
         <insert tableName="theory">
-            <column name="work_id" value="2" />
+            <column name="work_id" value="2"/>
             <column name="text">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean
+                massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam
+                felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede
+                justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a,
+                venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.
+                Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+                consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.
+                Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi
+                vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus
+                eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam
+                nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus.
+                Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros
+                faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed
+                consequat, leo eget bibendum sodales, augue velit cursus nunc,
             </column>
         </insert>
-        
+
         <insert tableName="test">
-            <column name="work_id" value="1" />
-            <column name="description" value="Описание теста №1" />
+            <column name="work_id" value="1"/>
+            <column name="description" value="Описание теста №1"/>
         </insert>
 
         <insert tableName="question">
-            <column name="test_id" value="1" />
-            <column name="text" value="Сколько будет 3 + 2?" />
-            <column name="type" value="SINGLE" />
+            <column name="test_id" value="1"/>
+            <column name="text" value="Сколько будет 3 + 2?"/>
+            <column name="type" value="SINGLE"/>
         </insert>
 
         <insert tableName="answer">
-            <column name="question_id" value="1" />
-            <column name="text" value="5" />
-            <column name="correct" value="true" />
+            <column name="question_id" value="1"/>
+            <column name="text" value="5"/>
+            <column name="correct" valueBoolean="true"/>
         </insert>
 
         <insert tableName="answer">
-            <column name="question_id" value="1" />
-            <column name="text" value="2" />
-            <column name="correct" value="false" />
+            <column name="question_id" value="1"/>
+            <column name="text" value="2"/>
+            <column name="correct" valueBoolean="false"/>
         </insert>
 
         <insert tableName="answer">
-            <column name="question_id" value="1" />
-            <column name="text" value="7" />
-            <column name="correct" value="false" />
+            <column name="question_id" value="1"/>
+            <column name="text" value="7"/>
+            <column name="correct" valueBoolean="false"/>
         </insert>
 
 
         <insert tableName="question">
-            <column name="test_id" value="1" />
-            <column name="text" value="Сколько будет 5 + 4?" />
-            <column name="type" value="MULTIPLY" />
+            <column name="test_id" value="1"/>
+            <column name="text" value="Сколько будет 5 + 4?"/>
+            <column name="type" value="MULTIPLY"/>
         </insert>
 
         <insert tableName="answer">
-            <column name="question_id" value="2" />
-            <column name="text" value="9" />
-            <column name="correct" value="true" />
+            <column name="question_id" value="2"/>
+            <column name="text" value="9"/>
+            <column name="correct" valueBoolean="true"/>
         </insert>
 
         <insert tableName="answer">
-            <column name="question_id" value="2" />
-            <column name="text" value="7" />
-            <column name="correct" value="false" />
+            <column name="question_id" value="2"/>
+            <column name="text" value="7"/>
+            <column name="correct" valueBoolean="false"/>
         </insert>
 
         <insert tableName="answer">
-            <column name="question_id" value="2" />
-            <column name="text" value="девять" />
-            <column name="correct" value="true" />
+            <column name="question_id" value="2"/>
+            <column name="text" value="девять"/>
+            <column name="correct" valueBoolean="true"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
