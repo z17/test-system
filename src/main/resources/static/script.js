@@ -41,7 +41,7 @@ $(document).ready(function () {
 
     $(document).on('submit', 'form.form-work', function () {
         let data = {
-            id : $(this).data('id'),
+            id: $(this).data('id'),
             name: $(this).find('#title').val(),
             description: $(this).find('#description').val(),
             theory: $(this).find('#theory').val(),
@@ -69,7 +69,6 @@ $(document).ready(function () {
             );
         });
 
-        console.log(data);
         let self = this;
         $.ajax({
             url: '/api/updateWork',
@@ -87,5 +86,24 @@ $(document).ready(function () {
         });
 
         return false;
+    });
+
+    // main page
+    $('li.work .delete').click(function () {
+        if (confirm('Удалить?')) {
+            let id = $(this).data('id');
+            let self = this;
+            $.ajax({
+                url: '/api/work/' + id + '/delete',
+                dataType: 'json',
+                method: 'GET',
+                contentType: 'application/json'
+            }).done(function () {
+                alert('Удалено');
+                $(self).parent().remove();
+            }).fail(function () {
+                alert('Ошибка');
+            });
+        }
     });
 });

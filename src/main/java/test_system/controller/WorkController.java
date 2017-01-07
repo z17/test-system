@@ -45,13 +45,6 @@ public class WorkController extends AbstractController {
     }
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/work/{id}/delete", method = RequestMethod.GET)
-    public String delete(@PathVariable final long id, final Model model) {
-        workService.delete(id);
-        return run(Template.DELETE_PAGE_TEMPLATE, model);
-    }
-
-    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/work/{id}/edit", method = RequestMethod.GET)
     public String edit(@PathVariable final long id, final Model model) {
         model.addAttribute("data", workService.getWorkData(id));

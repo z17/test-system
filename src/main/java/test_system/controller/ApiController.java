@@ -1,10 +1,9 @@
 package test_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import test_system.data.WorkCreateData;
 import test_system.service.WorkService;
 
@@ -21,6 +20,13 @@ public class ApiController {
     @RequestMapping(value = "/updateWork", method = RequestMethod.POST)
     public boolean createWork(@RequestBody final WorkCreateData data) {
         workService.updateWork(data);
+        return true;
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping(value = "/work/{id}/delete", method = RequestMethod.GET)
+    public Boolean delete(@PathVariable final long id) {
+        workService.delete(id);
         return true;
     }
 }

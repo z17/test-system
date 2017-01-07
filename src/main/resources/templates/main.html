@@ -7,15 +7,15 @@
     <th:block th:include="modules/menu"/>
     <div class="content">
         <h1>Список задач</h1>
-        <ul th:each="work : ${works}">
-            <li class="work-name">
+        <ul class="works-list" th:each="work : ${works}">
+            <li class="work">
                 <a th:href="@{'/work/' + ${work.id}}" th:text="${work.name}">Имя задачи</a>
                 <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}"
                    th:href="@{'/work/' + ${work.id} + '/edit' }" title="Редактировать"><img src="/img/edit.png"
                                                                                             class="edit-icon"
                                                                                             alt=""/></a>
                 <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}"
-                   th:href="@{'/work/' + ${work.id} + '/delete'}" title="Удалить"><img src="/img/delete.png"
+                   th:data-id="${work.id}" class="delete" title="Удалить"><img src="/img/delete.png"
                                                                                        class="delete-icon" alt=""/></a>
             </li>
         </ul>

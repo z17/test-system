@@ -54,7 +54,11 @@ body {
     display: inline-block;
 }
 
-li.work-name {
+ul.works-list li.work {
+}
+
+ul.works-list li.work .delete {
+    cursor: pointer;
 }
 
 .question {
