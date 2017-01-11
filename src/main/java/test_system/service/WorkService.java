@@ -22,9 +22,8 @@ public class WorkService {
 
     private final WorkRepository workRepository;
 
-    private final WorkExecutionService workExecutionService;
-
-    private final UserService userService;
+    @Autowired
+    private WorkExecutionService workExecutionService;
 
     @Autowired
     private TheoryService theoryService;
@@ -33,10 +32,8 @@ public class WorkService {
     private TestService testService;
 
     @Autowired
-    public WorkService(final WorkRepository workRepository, WorkExecutionService workExecutionService, UserService userService) {
+    public WorkService(final WorkRepository workRepository) {
         this.workRepository = workRepository;
-        this.workExecutionService = workExecutionService;
-        this.userService = userService;
     }
 
     public List<WorkEntity> getWorks() {

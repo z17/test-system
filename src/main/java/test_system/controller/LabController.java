@@ -2,6 +2,7 @@ package test_system.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import test_system.service.LabService;
 import test_system.service.UserService;
 
+@Controller
 public class LabController extends AbstractController  {
     private final LabService labService;
 
