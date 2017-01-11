@@ -54,6 +54,7 @@ body {
     display: inline-block;
 }
 
+
 ul.works-list li.work {
 }
 
@@ -81,9 +82,13 @@ ul.works-list li.work .delete {
     color: #00a500;
 }
 
-.form.form-work .field label {
+.form.form-work .field label, .form .field .label.wide {
     display: block;
     width: 600px;
+}
+
+.form .field .label.wide + input[type=file] {
+    margin: 10px 0;
 }
 
 .form.form-work .field input[type=text] {
