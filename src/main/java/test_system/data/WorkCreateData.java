@@ -1,6 +1,7 @@
 package test_system.data;
 
 import lombok.Data;
+import test_system.entity.Lab;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public class WorkCreateData {
     final String theory;
     final String testDescription;
     final List<QuestionData<AnswerData>> questions;
+    final Lab lab;
 }

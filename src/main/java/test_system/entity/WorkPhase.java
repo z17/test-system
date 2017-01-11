@@ -6,8 +6,8 @@ import java.util.List;
 public enum  WorkPhase {
     THEORY("Теория"),
     TEST("Тест", THEORY),
-//    LAB(TEST),
-    FINISHED("Завершено", TEST);
+    LAB("Лабораторная работа", TEST),
+    FINISHED("Завершено", TEST, LAB);
 
     private final String text;
     private final List<WorkPhase> sourcePhases;

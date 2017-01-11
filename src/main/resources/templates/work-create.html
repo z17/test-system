@@ -58,6 +58,12 @@
                 <div class="add addQuestion">+</div>
             </ol>
 
+            <h2>Лабораторная работа</h2>
+
+            <select id="lab">
+                <option th:each="one : ${T(test_system.entity.Lab).values()}" th:text="${one.name}" th:value="${one}"></option>
+            </select>
+
             <input th:type="submit" class="submit-create" value="Сохранить"/>
         </form>
 

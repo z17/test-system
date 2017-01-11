@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test_system.data.WorkCreateData;
 import test_system.data.WorkData;
-import test_system.entity.TheoryEntity;
 import test_system.entity.WorkEntity;
 import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
@@ -134,6 +133,7 @@ public class WorkService {
         WorkEntity work = new WorkEntity();
         work.setName(data.getName());
         work.setDescription(data.getDescription());
+        work.setLab(data.getLab());
         val createdWork = workRepository.save(work);
 
         theoryService.create(createdWork.getId(), data.getTheory());
@@ -147,11 +147,23 @@ public class WorkService {
 
         work.setName(data.getName());
         work.setDescription(data.getDescription());
+        work.setLab(data.getLab());
 
         theoryService.update(work.getId(), data.getTheory());
         testService.update(work.getId(), data.getTestDescription(), data.getQuestions());
 
         workRepository.save(work);
         return work;
+    }
+
+    public WorkExecutionEntity getFinishedAttempt(long workId) {
+        val user = userService.getCurrentUser();
+        val work = getWork(workId);
+        val activeAttempt = workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
+        if (activeAttempt != null) {
+            throw new RuntimeException("Your work in progress");
+        }
+
+        return workExecutionRepository.findFirstByUserAndWorkAndPhaseOrderByIdDesc(user, work, WorkPhase.FINISHED);
     }
 }

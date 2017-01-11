@@ -47,6 +47,7 @@ $(document).ready(function () {
             theory: $(this).find('#theory').val(),
             testDescription: $(this).find('#test-description').val(),
             questions: [],
+            lab: $(this).find('#lab').val(),
         };
         $(this).find('.questions .question').each(function () {
             let answers = [];

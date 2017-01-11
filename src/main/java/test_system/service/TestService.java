@@ -56,10 +56,16 @@ public class TestService {
         return test;
     }
 
-    public ResultData finishPage(final long workId, final MultiValueMap<String, String> testResultData) {
+    public String finishTest(final long workId, final MultiValueMap<String, String> testResultData) {
         val test = getTestByWorkId(workId);
+        val work = workService.getWork(workId);
 
-        val workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
+        WorkExecutionEntity workExecutionEntity;
+        if (work.getLab() != Lab.EMPTY || work.getLab() != null) {
+            workExecutionEntity = workService.workProcess(workId, WorkPhase.LAB);
+        } else {
+            workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
+        }
 
         final List<WorkAnswerEntity> answers = processTestResultData(workExecutionEntity, testResultData);
         workAnswerRepository.save(answers);
@@ -76,8 +82,17 @@ public class TestService {
             }
         }
 
-        val result = workService.finishTest(workExecutionEntity, correctQuestionCount, test.getQuestions().size());
-        return new ResultData(result);
+        workService.finishTest(workExecutionEntity, correctQuestionCount, test.getQuestions().size());
+        return "work/" + workId + "/finish";
+    }
+
+    public void finishLab(final long workId, final Object data) {
+
+    }
+
+    public ResultData finishPage(final long workId) {
+        val workExecutionEntity = workService.getFinishedAttempt(workId);
+        return new ResultData(workExecutionEntity);
     }
 
     private List<WorkAnswerEntity> processTestResultData(final WorkExecutionEntity workExecution, final MultiValueMap<String, String> testResultData) {

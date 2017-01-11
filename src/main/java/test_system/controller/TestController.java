@@ -36,10 +36,24 @@ public class TestController extends AbstractController {
         return run(Template.TEST_PAGE_TEMPLATE, model);
     }
 
+
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/work/{id}/finish", method = RequestMethod.POST)
-    public String sendTestAnswers(@PathVariable final long id, @RequestParam final MultiValueMap<String, String> data, final Model model) {
-        model.addAttribute("result", testService.finishPage(id, data));
+    @RequestMapping(value = "/work/{id}/testComplete", method = RequestMethod.POST)
+    public String testComplete(@PathVariable final long id, @RequestParam final MultiValueMap<String, String> data, final Model model) {
+        return "redirect:/" + testService.finishTest(id, data);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/work/{id}/labComplete", method = RequestMethod.POST)
+    public String labComplete(@PathVariable final long id, @RequestParam final Object data, final Model model) {
+        testService.finishLab(id, data);
+        return "redirect:/work/" + id + "/finish";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/work/{id}/finish", method = RequestMethod.GET)
+    public String finish(@PathVariable final long id, final Model model) {
+        model.addAttribute("result", testService.finishPage(id));
         return run(Template.TEST_RESULT_PAGE_TEMPLATE, model);
     }
 
