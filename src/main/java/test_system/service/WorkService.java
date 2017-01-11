@@ -4,6 +4,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import test_system.data.ResultData;
 import test_system.data.WorkCreateData;
 import test_system.data.WorkData;
 import test_system.entity.WorkEntity;
@@ -13,7 +14,6 @@ import test_system.exception.NotFoundException;
 import test_system.repository.WorkExecutionRepository;
 import test_system.repository.WorkRepository;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -22,7 +22,7 @@ public class WorkService {
 
     private final WorkRepository workRepository;
 
-    private final WorkExecutionRepository workExecutionRepository;
+    private final WorkExecutionService workExecutionService;
 
     private final UserService userService;
 
@@ -33,9 +33,9 @@ public class WorkService {
     private TestService testService;
 
     @Autowired
-    public WorkService(final WorkRepository workRepository, WorkExecutionRepository workExecutionRepository, UserService userService) {
+    public WorkService(final WorkRepository workRepository, WorkExecutionService workExecutionService, UserService userService) {
         this.workRepository = workRepository;
-        this.workExecutionRepository = workExecutionRepository;
+        this.workExecutionService = workExecutionService;
         this.userService = userService;
     }
 
@@ -51,38 +51,6 @@ public class WorkService {
         }
 
         return work;
-    }
-
-    WorkExecutionEntity finishTest(final WorkExecutionEntity work, final int correctAmount, final int allAmount) {
-        work.setCorrectQuestionsAmount(correctAmount);
-        work.setQuestionsAmount(allAmount);
-        work.setEndTime(new Timestamp(System.currentTimeMillis()));
-        return workExecutionRepository.save(work);
-    }
-
-    WorkExecutionEntity startWork(final long workId) {
-        val user = userService.getCurrentUser();
-        val work = getWork(workId);
-
-        val currentExecutions = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
-        if (!currentExecutions.isEmpty()) {
-            if (currentExecutions.size() > 1) {
-                throw new RuntimeException("Unknown Error");
-            }
-
-            val currentExecution = currentExecutions.get(0);
-            if (!currentExecution.getWork().equals(work) || currentExecution.getPhase() != WorkPhase.THEORY) {
-                throw new RuntimeException("Some work already started");
-            } else {
-                return currentExecution;
-            }
-        }
-
-        val execution = new WorkExecutionEntity();
-        execution.setUser(user);
-        execution.setWork(work);
-        execution.setPhase(WorkPhase.THEORY);
-        return workExecutionRepository.save(execution);
     }
 
     public WorkEntity updateWork(final WorkCreateData data) {
@@ -133,14 +101,8 @@ public class WorkService {
         return work;
     }
 
-    WorkExecutionEntity getFinishedAttempt(long workId) {
-        val user = userService.getCurrentUser();
-        val work = getWork(workId);
-        val activeAttempt = workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
-        if (activeAttempt != null) {
-            throw new RuntimeException("Your work in progress");
-        }
-
-        return workExecutionRepository.findFirstByUserAndWorkAndPhaseOrderByIdDesc(user, work, WorkPhase.FINISHED);
+    public ResultData finishPage(final long workId) {
+        val workExecutionEntity = workExecutionService.getFinishedAttempt(workId);
+        return new ResultData(workExecutionEntity);
     }
 }

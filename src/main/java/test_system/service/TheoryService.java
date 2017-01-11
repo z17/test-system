@@ -4,8 +4,6 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_system.entity.TheoryEntity;
-import test_system.entity.WorkEntity;
-import test_system.entity.WorkPhase;
 import test_system.exception.NotFoundException;
 import test_system.repository.TheoryRepository;
 
@@ -13,12 +11,12 @@ import test_system.repository.TheoryRepository;
 public class TheoryService {
 
     private final TheoryRepository theoryRepository;
-    private final WorkService workService;
+    private final WorkExecutionService workExecutionService;
 
     @Autowired
-    public TheoryService(TheoryRepository theoryRepository, WorkService workService) {
+    public TheoryService(TheoryRepository theoryRepository, WorkService workService, WorkExecutionService workExecutionService) {
         this.theoryRepository = theoryRepository;
-        this.workService = workService;
+        this.workExecutionService = workExecutionService;
     }
 
     TheoryEntity getTheoryByWorkId(final long workId) {
@@ -33,7 +31,7 @@ public class TheoryService {
     public TheoryEntity theoryPage(final long workId) {
         val theory = getTheoryByWorkId(workId);
 
-        workService.startWork(workId);
+        workExecutionService.startWork(workId);
         return theory;
     }
 

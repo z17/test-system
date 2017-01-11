@@ -14,6 +14,7 @@ import test_system.repository.QuestionRepository;
 import test_system.repository.TestRepository;
 import test_system.repository.WorkAnswerRepository;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -85,20 +86,23 @@ public class TestService {
             }
         }
 
+        // todo: refactor this
+        String url;
         if (work.getLab() != Lab.EMPTY && work.getLab() != null) {
             workExecution.setPhase(WorkPhase.LAB);
+            url = "work/" + workId + "/lab";
         } else {
             workExecution.setPhase(WorkPhase.FINISHED);
+            url = "work/" + workId + "/finish";
         }
 
-        workService.finishTest(workExecution, correctQuestionCount, test.getQuestions().size());
+        workExecution.setCorrectQuestionsAmount(correctQuestionCount);
+        workExecution.setQuestionsAmount(test.getQuestions().size());
+        workExecution.setEndTime(new Timestamp(System.currentTimeMillis()));
 
-        return "work/" + workId + "/finish";
-    }
+        workExecutionService.update(workExecution);
 
-    public ResultData finishPage(final long workId) {
-        val workExecutionEntity = workService.getFinishedAttempt(workId);
-        return new ResultData(workExecutionEntity);
+        return url;
     }
 
     private List<WorkAnswerEntity> processTestResultData(final WorkExecutionEntity workExecution, final MultiValueMap<String, String> testResultData) {

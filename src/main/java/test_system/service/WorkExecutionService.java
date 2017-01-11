@@ -41,4 +41,47 @@ public class WorkExecutionService {
         workExecution.setPhase(phase);
         workExecutionRepository.save(workExecution);
     }
+
+    void update(WorkExecutionEntity workExecution) {
+        if (workExecution.getId() == null) {
+            throw new RuntimeException();
+        }
+        workExecutionRepository.save(workExecution);
+    }
+
+    WorkExecutionEntity startWork(final long workId) {
+        val user = userService.getCurrentUser();
+        val work = workService.getWork(workId);
+
+        val currentExecutions = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
+        if (!currentExecutions.isEmpty()) {
+            if (currentExecutions.size() > 1) {
+                throw new RuntimeException("Unknown Error");
+            }
+
+            val currentExecution = currentExecutions.get(0);
+            if (!currentExecution.getWork().equals(work) || currentExecution.getPhase() != WorkPhase.THEORY) {
+                throw new RuntimeException("Some work already started");
+            } else {
+                return currentExecution;
+            }
+        }
+
+        val execution = new WorkExecutionEntity();
+        execution.setUser(user);
+        execution.setWork(work);
+        execution.setPhase(WorkPhase.THEORY);
+        return workExecutionRepository.save(execution);
+    }
+
+    WorkExecutionEntity getFinishedAttempt(long workId) {
+        val user = userService.getCurrentUser();
+        val work = workService.getWork(workId);
+        val activeAttempt = workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
+        if (activeAttempt != null) {
+            throw new RuntimeException("Your work in progress");
+        }
+
+        return workExecutionRepository.findFirstByUserAndWorkAndPhaseOrderByIdDesc(user, work, WorkPhase.FINISHED);
+    }
 }
