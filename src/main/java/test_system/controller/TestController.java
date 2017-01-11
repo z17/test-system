@@ -44,13 +44,6 @@ public class TestController extends AbstractController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/work/{id}/labComplete", method = RequestMethod.POST)
-    public String labComplete(@PathVariable final long id, @RequestParam final Object data, final Model model) {
-        testService.finishLab(id, data);
-        return "redirect:/work/" + id + "/finish";
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/work/{id}/finish", method = RequestMethod.GET)
     public String finish(@PathVariable final long id, final Model model) {
         model.addAttribute("result", testService.finishPage(id));

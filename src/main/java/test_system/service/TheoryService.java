@@ -33,7 +33,7 @@ public class TheoryService {
     public TheoryEntity theoryPage(final long workId) {
         val theory = getTheoryByWorkId(workId);
 
-        workService.workProcess(workId, WorkPhase.THEORY);
+        workService.startWork(workId);
         return theory;
     }
 

@@ -29,14 +29,16 @@ public class TestService {
     private final WorkAnswerRepository workAnswerRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final WorkExecutionService workExecutionService;
 
     @Autowired
-    public TestService(TestRepository testRepository, WorkService workService, WorkAnswerRepository workAnswerRepository, QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    public TestService(TestRepository testRepository, WorkService workService, WorkAnswerRepository workAnswerRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, WorkExecutionService workExecutionService) {
         this.testRepository = testRepository;
         this.workService = workService;
         this.workAnswerRepository = workAnswerRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+        this.workExecutionService = workExecutionService;
     }
 
     TestEntity getTestByWorkId(final long workId) {
@@ -51,8 +53,7 @@ public class TestService {
     public TestEntity testPage(final long workId) {
         val test = getTestByWorkId(workId);
 
-        workService.workProcess(workId, WorkPhase.TEST);
-
+        startTest(workId);
         return test;
     }
 
@@ -60,14 +61,16 @@ public class TestService {
         val test = getTestByWorkId(workId);
         val work = workService.getWork(workId);
 
-        WorkExecutionEntity workExecutionEntity;
-        if (work.getLab() != Lab.EMPTY || work.getLab() != null) {
-            workExecutionEntity = workService.workProcess(workId, WorkPhase.LAB);
-        } else {
-            workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
+        val workExecution = workExecutionService.getProcessingWork(workId);
+        if (workExecution == null) {
+            throw new RuntimeException("Access is denied");
         }
 
-        final List<WorkAnswerEntity> answers = processTestResultData(workExecutionEntity, testResultData);
+        if (workExecution.getPhase() != WorkPhase.TEST) {
+            throw new RuntimeException("Access is denied");
+        }
+
+        final List<WorkAnswerEntity> answers = processTestResultData(workExecution, testResultData);
         workAnswerRepository.save(answers);
 
         List<Long> answerIds = answers.stream().map(WorkAnswerEntity::getAnswerId).collect(Collectors.toList());
@@ -82,12 +85,15 @@ public class TestService {
             }
         }
 
-        workService.finishTest(workExecutionEntity, correctQuestionCount, test.getQuestions().size());
+        if (work.getLab() != Lab.EMPTY && work.getLab() != null) {
+            workExecution.setPhase(WorkPhase.LAB);
+        } else {
+            workExecution.setPhase(WorkPhase.FINISHED);
+        }
+
+        workService.finishTest(workExecution, correctQuestionCount, test.getQuestions().size());
+
         return "work/" + workId + "/finish";
-    }
-
-    public void finishLab(final long workId, final Object data) {
-
     }
 
     public ResultData finishPage(final long workId) {
@@ -219,5 +225,24 @@ public class TestService {
                     answer.setCorrect(a.isCorrect());
                     return answer;
                 }).collect(Collectors.toList());
+    }
+
+    private void startTest(final long workId) {
+        WorkExecutionEntity workExecution = workExecutionService.getProcessingWork(workId);
+
+        if (workExecution == null) {
+            throw new RuntimeException("Access is denied");
+        }
+
+        if (workExecution.getPhase() == WorkPhase.TEST) {
+            return;
+        }
+
+        if (workExecution.getPhase() != WorkPhase.THEORY) {
+            // todo: other message
+            throw new RuntimeException("Access is denied");
+        }
+
+        workExecutionService.updatePhase(workExecution, WorkPhase.TEST);
     }
 }

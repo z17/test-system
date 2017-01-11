@@ -53,23 +53,6 @@ public class WorkService {
         return work;
     }
 
-    WorkExecutionEntity workProcess(final long workId, final WorkPhase requestPhase) {
-        WorkExecutionEntity workExecution = getProcessingWork(workId);
-
-        WorkPhase currentPhase = workExecution != null ? workExecution.getPhase() : null;
-        if (!WorkPhase.isTransitionAccess(currentPhase, requestPhase)) {
-            throw new RuntimeException("Access is denied");
-        }
-
-        if (workExecution == null) {
-            return startWork(workId);
-        }
-
-        workExecution.setPhase(requestPhase);
-        return workExecutionRepository.save(workExecution);
-    }
-
-
     WorkExecutionEntity finishTest(final WorkExecutionEntity work, final int correctAmount, final int allAmount) {
         work.setCorrectQuestionsAmount(correctAmount);
         work.setQuestionsAmount(allAmount);
@@ -77,7 +60,7 @@ public class WorkService {
         return workExecutionRepository.save(work);
     }
 
-    private WorkExecutionEntity startWork(final long workId) {
+    WorkExecutionEntity startWork(final long workId) {
         val user = userService.getCurrentUser();
         val work = getWork(workId);
 
@@ -100,12 +83,6 @@ public class WorkService {
         execution.setWork(work);
         execution.setPhase(WorkPhase.THEORY);
         return workExecutionRepository.save(execution);
-    }
-
-    private WorkExecutionEntity getProcessingWork(final long workId) {
-        val user = userService.getCurrentUser();
-        val work = getWork(workId);
-        return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
 
     public WorkEntity updateWork(final WorkCreateData data) {
@@ -156,7 +133,7 @@ public class WorkService {
         return work;
     }
 
-    public WorkExecutionEntity getFinishedAttempt(long workId) {
+    WorkExecutionEntity getFinishedAttempt(long workId) {
         val user = userService.getCurrentUser();
         val work = getWork(workId);
         val activeAttempt = workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
