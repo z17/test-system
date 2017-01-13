@@ -14,7 +14,7 @@
                     <p>[[${question.text}]]</p>
                     <div th:each="answer: ${question.answers}">
                         <input th:type="${question.type == T(test_system.entity.QuestionType).SINGLE ? 'radio' : 'checkbox'}"
-                               type="radio" th:name="'question-' + ${question.id}" th:value="${answer.id}"/>
+                               type="radio" th:name="'question-' + ${question.id}" th:value="${answer.id}" th:required="${question.type == T(test_system.entity.QuestionType).SINGLE}" />
                         [[${answer.text}]]
                     </div>
                 </div>

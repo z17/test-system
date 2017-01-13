@@ -32,7 +32,7 @@ $(document).ready(function () {
         newQuestion.removeClass('sample');
         bindAnswerDelete($(newQuestion).find('.answers .answer:first'));
         $(newQuestion).find('.answers .addAnswer').click(addAnswerFunction);
-        $(newQuestion).find('.question-type').attr('name', 'question-type-' + ($('ul.questions li.question').length + 1));
+        $(newQuestion).find('.question-type').attr('name', 'question-type-' + ($('ol.questions li.question').length + 1));
         newQuestion.insertAfter(questions.find('.question:last'));
     });
 
@@ -63,7 +63,7 @@ $(document).ready(function () {
                 {
                     id: $(this).data('id'),
                     text: $(this).find('.question-text').val(),
-                    type: $(this).find('.question-type').val(),
+                    type: $(this).find('.question-type:checked').val(),
                     answers: answers
                 }
             );
