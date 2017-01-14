@@ -2,12 +2,12 @@
     <div class="logo">Система тестирования</div>
     <div class="menu">
         <a href="/" class="menu-item">Главная</a>
-        <a href="/users" class="menu-item">Пользователи</a>
-        <a href="/statistic" class="menu-item">Статистика</a>
+        <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}" href="/users" class="menu-item">Пользователи</a>
+        <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}" href="/statistic" class="menu-item">Статистика</a>
 
 
-        <a th:if="${user} != null" href="/logout" class="menu-item right">Выход</a>
+        <a th:if="${user != null}" href="/logout" class="menu-item right">Выход</a>
         <a th:if="${user} == null" href="/login" class="menu-item right">Вход</a>
-        <span th:if="${user} != null" class="menu-item right">Привет, [[${user.name}]]</span>
+        <span th:if="${user} != null" class="menu-item right">Привет, <a href="/user-edit">[[${user.name}]]</a></span>
     </div>
 </div>

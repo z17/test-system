@@ -52,11 +52,11 @@ public class UserService {
         return userRepository.findByLogin(user.getUsername());
     }
 
-    public List<UserEntity> usersPage() {
+    public List<UserEntity> usersListPage() {
         return (List<UserEntity>) userRepository.findAll();
     }
 
-    public UserEntity getUser(long userId) {
+    UserEntity getUser(long userId) {
         val user = userRepository.findOne(userId);
 
         if (user == null) {
@@ -64,5 +64,12 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public void edit(final UserData userData) {
+        val user = getCurrentUser();
+        user.setName(userData.getName());
+        user.setPassword(bcryptEncoder.encode(userData.getPassword()));
+        userRepository.save(user);
     }
 }

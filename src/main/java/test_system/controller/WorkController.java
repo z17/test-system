@@ -31,6 +31,7 @@ public class WorkController extends AbstractController {
         return run(Template.MAIN_TEMPLATE, model);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/work/{id}", method = RequestMethod.GET)
     public String workPage(@PathVariable final long id, final Model model) {
         model.addAttribute("work", workService.getWork(id));

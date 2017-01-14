@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <div class="add-user-form">
+            <h2>Редактировать</h2>
+            <form th:action="@{/user-edit}" method="POST" class="form user-edit">
+                <div class="field">
+                    <label class="label">Логин:</label> [[${user.login}]]
+                </div>
+                <div class="field">
+                    <label for="name" class="label">Имя:</label>
+                    <input type="text" name="name" id="name" th:value="${user.name}" required/>
+                </div>
+
+                <div class="field">
+                    <label for="password" class="label">Пароль:</label>
+                    <input type="password" name="password" id="password" required/>
+                </div>
+
+                <div class="field">
+                    <label for="password2" class="label wide">Ещё раз:</label>
+                    <input type="password" name="password2" id="password2" required/>
+                </div>
+                <input type="submit" value="Создать"/>
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

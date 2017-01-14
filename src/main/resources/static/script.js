@@ -106,4 +106,12 @@ $(document).ready(function () {
             });
         }
     });
+
+    $(document).on('submit', 'form.user-edit', function () {
+       if ($('form.user-edit #password').val() != $('form.user-edit #password2').val()) {
+           alert('Пароли не совпадают!');
+           return false;
+       }
+       return true;
+    });
 });

@@ -12,6 +12,7 @@ final class Template {
 
     static final String LOGIN_PAGE_TEMPLATE = "login";
     static final String USERS_PAGE_TEMPLATE = "users";
+    static final String USER_PAGE_TEMPLATE = "user-edit";
 
     static final String STATISTIC_MAIN_TEMPLATE = "statistic";
     static final String STATISTIC_WORK_TEMPLATE = "statistic-work";
@@ -19,6 +20,5 @@ final class Template {
     static final String STATISTIC_ATTEMPT_TEMPLATE = "statistic-attempt";
 
     static final String WORK_CREATE_TEMPLATE = "work-create";
-    static final String DELETE_PAGE_TEMPLATE = "work-delete";
     static final String EDIT_PAGE_TEMPLATE = "work-edit";
 }
