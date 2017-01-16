@@ -4,9 +4,32 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public final class BmpHelper {
+
+    public static void writeMatrix(final String name, final int[][] matrix) {
+        List<String> lines = new ArrayList<>();
+        for (int[] m : matrix) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int k : m) {
+                stringBuilder.append(String.format("%7d", k));
+            }
+            lines.add(stringBuilder.toString());
+        }
+        try {
+            Files.write(Paths.get(name), lines, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void writeBmp(final String name, final int[][] matrix) {
 
         int[] preparedArray = new int[matrix.length * matrix[0].length];
@@ -48,15 +71,4 @@ public final class BmpHelper {
         }
     }
 
-    public static int cols(int[][] matrix) {
-        long count = Arrays.stream(matrix).map(array -> array.length).distinct().count();
-        if (count > 1) {
-            throw new IllegalArgumentException("Not a matrix");
-        }
-        return matrix[0].length;
-    }
-
-    public static int rows(int[][] matrix) {
-        return matrix.length;
-    }
 }
