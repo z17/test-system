@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 public final class FunctionalHelper {
-    public static Complex[][] transformIntMatrixToComplex(int[][] matrix) {
+    public static Complex[][] transformIntMatrixToComplex(Integer[][] matrix) {
         int cols = cols(matrix);
         int rows = rows(matrix);
 
@@ -21,24 +21,12 @@ public final class FunctionalHelper {
         return result;
     }
 
-    public static int cols(int[][] matrix) {
-        long count = Arrays.stream(matrix).map(array -> array.length).distinct().count();
-        if (count > 1) {
-            throw new IllegalArgumentException("Not a matrix");
-        }
-        return matrix[0].length;
-    }
-
     public static <T> int cols(T[][] matrix) {
         long count = Arrays.stream(matrix).map(array -> array.length).distinct().count();
         if (count > 1) {
             throw new IllegalArgumentException("Not a matrix");
         }
         return matrix[0].length;
-    }
-
-    public static int rows(int[][] matrix) {
-        return matrix.length;
     }
 
     public static <T> int rows(T[][] matrix) {
@@ -55,20 +43,23 @@ public final class FunctionalHelper {
         return result;
     }
 
-    public static int[][] multiplyMatrix(int[][] matrix, double q) {
-        for (int i = 0; i < matrix.length; i++) {
-            for (int k = 0; k < matrix[i].length; k++) {
-                matrix[i][k] = (int) Math.round(matrix[i][k] * q);
-            }
-        }
-        return matrix;
-    }
-
     public static Double min(Double[][] hac) {
         return Stream.of(hac).flatMap(Stream::of).mapToDouble(v -> v).min().orElse(0);
     }
 
     public static Double max(Double[][] hac) {
         return Stream.of(hac).flatMap(Stream::of).mapToDouble(v -> v).max().orElse(0);
+    }
+
+    public static <T extends Number> double mean(T[][] matrix) {
+        double sum = 0;
+        int count = 0;
+        for (T[] aMatrix : matrix) {
+            for (T anAMatrix : aMatrix) {
+                sum += anAMatrix.doubleValue();
+                count++;
+            }
+        }
+        return sum / count;
     }
 }

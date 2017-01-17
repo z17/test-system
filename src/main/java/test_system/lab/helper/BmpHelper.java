@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public final class BmpHelper {
         }
     }
 
-    public static void writeBmp(final String name, final Double[][] matrix) {
+    public static void writeBmp(final Path path, final Double[][] matrix) {
 
         double[] preparedArray = new double[matrix.length * matrix[0].length];
 
@@ -46,19 +47,19 @@ public final class BmpHelper {
         img.getRaster().setPixels(0, 0, matrix[0].length, matrix.length, preparedArray);
 
         try {
-            ImageIO.write(img, "BMP", new File(name));
+            ImageIO.write(img, "BMP", path.toFile());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static int[][] readBmp(final String name) {
+    public static Integer[][] readBmp(final String name) {
         try {
             BufferedImage read = ImageIO.read(new File(name));
             int[] opt = null;
             int[] pixels = read.getRaster().getPixels(0, 0, read.getWidth(), read.getHeight(), opt);
-            int[][] result = new int[read.getHeight()][ read.getWidth()];
+            Integer[][] result = new Integer[read.getHeight()][ read.getWidth()];
             for (int i = 0; i < read.getHeight(); i++ ) {
                 for (int k = 0; k < read.getWidth(); k++) {
                     int index = k + i * read.getWidth();

@@ -9,9 +9,13 @@ import test_system.entity.Lab;
 import test_system.entity.WorkEntity;
 import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
+import test_system.lab.HolographyLab;
+import test_system.lab.LabResult;
 import test_system.lab.LabStrategy;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -22,9 +26,12 @@ public class LabService {
     private final WorkExecutionService workExecutionService;
 
     // todo: to properties
-    private final Path labFilesFolder = Paths.get("C:\\Java\\projects\\test-system");
+    public static final Path LAB_FILES_FOLDER = Paths.get("C:\\Java\\projects\\test-system\\labs");
 
-    public final static String FILE_DATA_KEY = "lab-file";
+    @PostConstruct
+    public void init() throws IOException {
+        Files.createDirectories(LAB_FILES_FOLDER);
+    }
 
     @Autowired
     public LabService(WorkService workService, WorkExecutionService workExecutionService) {
@@ -38,7 +45,7 @@ public class LabService {
         return work.getLab().getTemplate();
     }
 
-    public String processLab(final long workId, final MultipartFile file, final Map<String, String> data){
+    public String processLab(final long workId, final MultipartFile file, final Map<String, String> data) {
         val work = checkLab(workId);
 
         val processingWork = workExecutionService.getProcessingWork(workId);
@@ -46,8 +53,8 @@ public class LabService {
         try {
             val filePath = getLabFileName(processingWork, file);
             file.transferTo(filePath.toFile());
-            data.put(FILE_DATA_KEY, filePath.toString());
-            runLab(work.getLab(), data);
+            data.put(HolographyLab.FILE_KEY, filePath.toString());
+            runLab(work.getLab(), processingWork.getId(), data);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -79,10 +86,10 @@ public class LabService {
         return work;
     }
 
-    private void runLab(final Lab lab, final Map<String, String> data) {
+    private void runLab(final Lab lab, final long executionId, final Map<String, String> data) {
         try {
             LabStrategy labStrategy = lab.getStrategy().newInstance();
-            labStrategy.process(data);
+            LabResult process = labStrategy.process(data, LAB_FILES_FOLDER, executionId + "-");
 
             // todo: save data
         } catch (InstantiationException | IllegalAccessException e) {
@@ -92,10 +99,10 @@ public class LabService {
     }
 
     private Path getLabFileName(final WorkExecutionEntity workExecutionEntity, final MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        String name = FilenameUtils.removeExtension(originalFilename);
-        String extension = FilenameUtils.getExtension(originalFilename);
-
-        return labFilesFolder.resolve(name + "-" + workExecutionEntity.getId() + "." + extension);
+        val originalFilename = file.getOriginalFilename();
+        val name = FilenameUtils.removeExtension(originalFilename);
+        val extension = FilenameUtils.getExtension(originalFilename);
+        return LAB_FILES_FOLDER.resolve(workExecutionEntity.getId() + "-" + name + "." + extension);
     }
+
 }

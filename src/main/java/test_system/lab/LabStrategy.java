@@ -1,7 +1,8 @@
 package test_system.lab;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 public interface LabStrategy {
-    void process(Map<String, String> data);
+    LabResult process(Map<String, String> data, Path pathToOutFolder, String outPrefixName);
 }

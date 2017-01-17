@@ -8,12 +8,7 @@ import org.apache.commons.math3.transform.TransformType;
 import java.util.stream.DoubleStream;
 
 public final class MathHelper {
-    public static Complex[] cfft(final double[] array) {
-        final FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.UNITARY);
-        return transformer.transform(array, TransformType.INVERSE);
-    }
-
-    public static Complex[][] cfft(final int[][] matrix) {
+    public static Complex[][] cfft(final Integer[][] matrix) {
         Complex[][] m = FunctionalHelper.transformIntMatrixToComplex(matrix);
         return  cfft(m);
     }
@@ -26,11 +21,6 @@ public final class MathHelper {
     public static Complex[][] iccft(final Complex[][] matrix) {
         final FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.UNITARY);
         return  (Complex[][]) transformer.mdfft(matrix, TransformType.FORWARD);
-    }
-
-    public static Complex[][] icfft(final int[][] matrix) {
-        Complex[][] m = FunctionalHelper.transformIntMatrixToComplex(matrix);
-        return iccft(m);
     }
 
     public static Double[][] abs(final Complex[][] matrix) {
