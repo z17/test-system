@@ -3,6 +3,9 @@ package test_system.lab.helper;
 import org.apache.commons.math3.complex.Complex;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Stream;
 
 public final class FunctionalHelper {
     public static Complex[][] transformIntMatrixToComplex(int[][] matrix) {
@@ -59,5 +62,13 @@ public final class FunctionalHelper {
             }
         }
         return matrix;
+    }
+
+    public static Double min(Double[][] hac) {
+        return Stream.of(hac).flatMap(Stream::of).mapToDouble(v -> v).min().orElse(0);
+    }
+
+    public static Double max(Double[][] hac) {
+        return Stream.of(hac).flatMap(Stream::of).mapToDouble(v -> v).max().orElse(0);
     }
 }

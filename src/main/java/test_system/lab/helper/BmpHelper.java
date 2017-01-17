@@ -30,13 +30,13 @@ public final class BmpHelper {
         }
     }
 
-    public static void writeBmp(final String name, final int[][] matrix) {
+    public static void writeBmp(final String name, final Double[][] matrix) {
 
-        int[] preparedArray = new int[matrix.length * matrix[0].length];
+        double[] preparedArray = new double[matrix.length * matrix[0].length];
 
         int index = 0;
-        for (int[] aMatrix : matrix) {
-            for (int value : aMatrix) {
+        for (Double[] aMatrix : matrix) {
+            for (Double value : aMatrix) {
                 preparedArray[index] = value;
                 index++;
             }
