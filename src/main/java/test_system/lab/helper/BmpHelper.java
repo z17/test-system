@@ -37,7 +37,7 @@ public final class BmpHelper {
         int index = 0;
         for (Double[] aMatrix : matrix) {
             for (Double value : aMatrix) {
-                preparedArray[index] = value;
+                preparedArray[index] = value != null ? value : 0;
                 index++;
             }
         }

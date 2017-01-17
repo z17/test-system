@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HolographyLab implements LabStrategy {
+
     @Override
     public void process(Map<String, String> data) {
 
@@ -48,6 +49,75 @@ public class HolographyLab implements LabStrategy {
         Double[][] hnc = hnc(hac);
 
         BmpHelper.writeBmp("out.bmp", hnc);
+
+
+        // todo: use another name, dont re-use
+        h = hc;
+
+        Complex[][] hb = new Complex[2 * X][2 * Y];
+        for (int i = 0; i <= 2 * X - 1; i++) {
+            for (int j = 0; j <= 2 * Y - 1; j++) {
+                hb[i][j] = new Complex(0);
+            }
+        }
+
+        for (int i = Y / 2; i <= Y + Y / 2 - 1; i++) {
+            for (int j = X / 2; j <= X + X / 2 - 1; j++) {
+                hb[j][i] = h[j - Y / 2][i - X / 2];
+            }
+        }
+
+        Complex[][] W = new Complex[2 * X][2 * Y];
+        for (int y1 = 0; y1 <= 2 * X - 1; y1++) {
+            for (int x1 = 0; x1 <= 2 * Y - 1; x1++) {
+                double v = (-Math.PI * a * a / (L * d)) * (Math.pow((x1 - 2 * X / 2), 2) + Math.pow((y1 - 2 * Y / 2), 2));
+                W[y1][x1] = new Complex(0, v).exp();
+            }
+        }
+        for (int y1 = 0; y1 <= 2 * X - 1; y1++) {
+            for (int x1 = 0; x1 <= 2 * Y - 1; x1++) {
+                hb[y1][x1] = hb[y1][x1].multiply(W[y1][x1]);
+            }
+        }
+
+        Complex[][] F = MathHelper.cfft(hb);
+
+        Complex[][] FF = new Complex[2 * X][2 * Y];
+        for (int y1 = 0; y1 <= 2 * X - 1; y1++) {
+            for (int x1 = 0; x1 <= 2 * Y - 1; x1++) {
+                Complex v1 = new Complex(0, 1 / L / d);
+                Complex v2 = new Complex(0, -2 * Math.PI / L * d).exp();
+                FF[y1][x1] = v1.multiply(v2).multiply(W[y1][x1]).multiply(F[y1][x1]);
+            }
+        }
+
+        Double[][] FFDouble = new Double[2 * X][2 * Y];
+
+        for (int y1 = 0; y1 <= 2 * X - 1; y1++) {
+            for (int x1 = 0; x1 <= 2 * Y - 1; x1++) {
+                FFDouble[y1][x1] = FF[y1][x1].abs();
+            }
+        }
+
+        Double min = FunctionalHelper.min(FFDouble);
+        Double max = FunctionalHelper.max(FFDouble);
+        for (int y1 = 0; y1 <= 2 * X - 1; y1++) {
+            for (int x1 = 0; x1 <= 2 * Y - 1; x1++) {
+                FFDouble[y1][x1] = (FFDouble[y1][x1] - min) / (max - min) * 255;
+            }
+        }
+
+        Double[][] doubles = FFc(Y, X, FFDouble);
+
+        Double[][]result = new Double[Y][X];
+        for (int i = 0; i < Y; i++) {
+            for(int j = 0; j < X; j++) {
+                result[i][j] = doubles[i][j];
+            }
+        }
+
+        BmpHelper.writeBmp("qwdqwsdvsdv.bmp", result);
+
     }
 
     private Double[][] hnc(final Double[][] hac) {
@@ -85,7 +155,36 @@ public class HolographyLab implements LabStrategy {
             System.arraycopy(h[j - Y / 2], 0, result[j], X / 2, X - X / 2);
         }
         return result;
+    }
 
+    private Double[][] FFc(final int Y, final int X, Double[][] FF) {
+        Double[][] res = new Double[2 * Y][2 * X];
+        Double[][] res1 = new Double[2 * Y][2 * X];
+        for (int j = 2 * Y / 4; j <= 2 * Y - 1; j++) {
+            for (int i = 0; i <= 2 * X - 1; i++) {
+                res[j][i] = FF[j - 2 * Y / 4][i];
+            }
+        }
+
+        for (int j = 0; j <= 2 * Y / 4 - 1; j++) {
+            for (int i = 0; i <= 2 * X - 1; i++) {
+                res[j][i] = FF[j + 3 * 2 * Y / 4][i];
+            }
+        }
+
+        for (int j = 0; j <= 2 * (Y - 1); j++) {
+            for (int i = 2 * X / 4; i <= 2 * X - 1; i++) {
+                res1[j][i] = res[j][i - 2 * X / 4];
+            }
+        }
+
+        for (int j = 0; j <= 2 * Y - 1; j++) {
+            for (int i = 0; i <= 2 * X / 4 - 1; i++) {
+                res1[j][i] = res[j][i + 3 * 2 * X / 4];
+            }
+        }
+
+        return res1;
     }
 
     public static void main(String[] args) {
