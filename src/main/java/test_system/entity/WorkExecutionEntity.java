@@ -37,4 +37,6 @@ public class WorkExecutionEntity {
     @Column(name = "questions")
     private int questionsAmount;
 
+    @OneToOne(mappedBy = "workExecution", cascade = CascadeType.ALL)
+    private LabResultEntity labResult;
 }

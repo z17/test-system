@@ -5,10 +5,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import test_system.entity.Lab;
-import test_system.entity.WorkEntity;
-import test_system.entity.WorkExecutionEntity;
-import test_system.entity.WorkPhase;
+import test_system.entity.*;
 import test_system.lab.HolographyLab;
 import test_system.lab.LabResult;
 import test_system.lab.LabStrategy;
@@ -54,7 +51,12 @@ public class LabService {
             val filePath = getLabFileName(processingWork, file);
             file.transferTo(filePath.toFile());
             data.put(HolographyLab.FILE_KEY, filePath.toString());
-            runLab(work.getLab(), processingWork.getId(), data);
+            LabResult result = runLab(work.getLab(), processingWork.getId(), data);
+            if ( processingWork.getLabResult() == null) {
+                processingWork.setLabResult(new LabResultEntity());
+            }
+            processingWork.getLabResult().setText(result.toJson());
+            workExecutionService.update(processingWork);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -86,12 +88,11 @@ public class LabService {
         return work;
     }
 
-    private void runLab(final Lab lab, final long executionId, final Map<String, String> data) {
+    private LabResult runLab(final Lab lab, final long executionId, final Map<String, String> data) {
         try {
             LabStrategy labStrategy = lab.getStrategy().newInstance();
-            LabResult process = labStrategy.process(data, LAB_FILES_FOLDER, executionId + "-");
+            return labStrategy.process(data, LAB_FILES_FOLDER, executionId + "-");
 
-            // todo: save data
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
             throw new RuntimeException();
