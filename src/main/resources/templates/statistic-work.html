@@ -31,10 +31,10 @@
                     <b>Пользователь:</b> <a th:href="'/statistic/' +  ${attempt.work.id} + '/user/' + ${attempt.user.id}" th:text="${attempt.user.name}">Имя</a>
                 </p>
                 <p>
-                    <b>Время начала:</b> [[${#dates.format(attempt.startTime, 'dd MMM yyyy HH:mm')}]]
+                    <b>Время начала:</b> [[${#dates.format(attempt.testStartTime, 'dd MMM yyyy HH:mm')}]]
                 </p>
                 <p>
-                    <b>Время окончания</b> [[${#dates.format(attempt.endTime, 'dd MMM yyyy HH:mm')}]]
+                    <b>Время окончания</b> [[${#dates.format(attempt.testEndTime, 'dd MMM yyyy HH:mm')}]]
                 </p>
                 <p>
                     <b>Количество верных ответов:</b> [[${attempt.correctQuestionsAmount * 100 /

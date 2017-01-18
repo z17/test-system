@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.Map;
 
 @Component
@@ -75,10 +76,15 @@ public class LabService {
         workExecutionService.update(workExecution);
     }
 
-    public void finishLab(final long workId, final Map<String, String> data) {
+    public void finishLab(final long workId) {
         val processingWork = checkLab(workId);
 
-//        runLab(work.getLab(), data);
+        processingWork.setPhase(WorkPhase.FINISHED);
+        if (processingWork.getLabResult() != null) {
+            processingWork.getLabResult().setEndTime(new Timestamp(System.currentTimeMillis()));
+        }
+
+        workExecutionService.update(processingWork);
     }
 
     private WorkExecutionEntity checkLab(final long workId) {

@@ -107,4 +107,8 @@ $(document).ready(function () {
             });
         }
     });
+
+    $('input.finish-lab').click(function () {
+        window.location.replace($('.form-lab').data('finish-url'));
+    });
 });

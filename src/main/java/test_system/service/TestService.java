@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import test_system.data.AnswerData;
 import test_system.data.QuestionData;
-import test_system.data.ResultData;
 import test_system.entity.*;
 import test_system.exception.NotFoundException;
 import test_system.repository.AnswerRepository;
@@ -98,7 +97,7 @@ public class TestService {
 
         workExecution.setCorrectQuestionsAmount(correctQuestionCount);
         workExecution.setQuestionsAmount(test.getQuestions().size());
-        workExecution.setEndTime(new Timestamp(System.currentTimeMillis()));
+        workExecution.setTestEndTime(new Timestamp(System.currentTimeMillis()));
 
         workExecutionService.update(workExecution);
 
@@ -247,6 +246,8 @@ public class TestService {
             throw new RuntimeException("Access is denied");
         }
 
-        workExecutionService.updatePhase(workExecution, WorkPhase.TEST);
+        workExecution.setPhase(WorkPhase.TEST);
+        workExecution.setTestStartTime(new Timestamp(System.currentTimeMillis()));
+        workExecutionService.update(workExecution);
     }
 }

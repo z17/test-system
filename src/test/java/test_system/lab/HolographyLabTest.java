@@ -1,5 +1,6 @@
 package test_system.lab;
 
+import lombok.val;
 import org.junit.Test;
 import test_system.service.LabService;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.*;
 
 public class HolographyLabTest {
@@ -28,11 +30,13 @@ public class HolographyLabTest {
         data.put(HolographyLab.L_HOLO_KEY, "632");
         data.put(HolographyLab.D_HOLO_KEY, "0.058");
 
-        HolographyLabResult result = lab.process(data, LabService.LAB_FILES_FOLDER_PATH, "1-");
+        HolographyLabResult result = lab.process(data, LabService.LAB_FILES_FOLDER_PATH, "56-");
 
         assertThat(result.getCorrelationCoefficient(), greaterThan(0.9));
-        assertThat(Files.exists(LabService.STATIC_FOLDER_PATH.resolve(result.getPathToHolography())), is(true));
-        assertThat(Files.exists(LabService.STATIC_FOLDER_PATH.resolve(result.getPathToRestored())), is(true));
+        assertThat(result.getCorrelationCoefficient(), lessThan(1.0));
+        val path = LabService.STATIC_FOLDER_PATH.toAbsolutePath().toString();
+        assertThat(Files.exists(Paths.get(path + result.getPathToHolography())), is(true));
+        assertThat(Files.exists(Paths.get(path + result.getPathToRestored())), is(true));
     }
 
 }

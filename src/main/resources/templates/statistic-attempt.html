@@ -11,10 +11,10 @@
             <b>Пользователь:</b> [[${data.attempt.user.name}]]
         </p>
         <p>
-            <b>Время начала:</b> [[${#dates.format(data.attempt.startTime, 'dd MMM yyyy HH:mm')}]]
+            <b>Время начала:</b> [[${#dates.format(data.attempt.testStartTime, 'dd MMM yyyy HH:mm')}]]
         </p>
         <p>
-            <b>Время окончания</b> [[${#dates.format(data.attempt.endTime, 'dd MMM yyyy HH:mm')}]]
+            <b>Время окончания</b> [[${#dates.format(data.attempt.testEndTime, 'dd MMM yyyy HH:mm')}]]
         </p>
         <p>
             <b>Количество верных ответов:</b> [[${data.attempt.correctQuestionsAmount * 100 /

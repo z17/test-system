@@ -13,6 +13,14 @@
             <column name="text" type="text">
                 <constraints nullable="false"/>
             </column>
+            <column name="start_time" type="TIMESTAMP" defaultValue="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="TIMESTAMP" />
         </createTable>
+
+        <dropDefaultValue  tableName="work_execution" columnName="start_time" />
+
+        <dropNotNullConstraint tableName="work_execution" columnName="start_time" columnDataType="TIMESTAMP" />
     </changeSet>
 </databaseChangeLog>

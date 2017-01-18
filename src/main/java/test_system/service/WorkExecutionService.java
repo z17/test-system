@@ -37,11 +37,6 @@ public class WorkExecutionService {
         return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
     }
 
-    void updatePhase(final WorkExecutionEntity workExecution, final WorkPhase phase) {
-        workExecution.setPhase(phase);
-        workExecutionRepository.save(workExecution);
-    }
-
     void update(WorkExecutionEntity workExecution) {
         if (workExecution.getId() == null) {
             throw new RuntimeException();

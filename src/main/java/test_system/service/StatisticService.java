@@ -35,10 +35,10 @@ public class StatisticService {
     public WorkStatisticData getWorkStatistic(final long workId) {
         val work = workService.getWork(workId);
 
-        List<WorkExecutionEntity> completedWorks = workExecutionRepository.findByWorkAndPhaseOrderByStartTimeDesc(work, WorkPhase.FINISHED);
+        List<WorkExecutionEntity> completedWorks = workExecutionRepository.findByWorkAndPhaseOrderByTestStartTimeDesc(work, WorkPhase.FINISHED);
 
         double correctData = completedWorks.stream().map(v -> v.getCorrectQuestionsAmount() * 100 / v.getQuestionsAmount()).collect(Collectors.averagingDouble(v -> v));
-        double time = completedWorks.stream().map(v -> v.getEndTime().getTime() - v.getStartTime().getTime()).collect(Collectors.averagingLong(v -> v));
+        double time = completedWorks.stream().map(v -> v.getTestEndTime().getTime() - v.getTestStartTime().getTime()).collect(Collectors.averagingLong(v -> v));
         int timeInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(Math.round(time));
         val test = testService.getTestByWorkId(workId);
 

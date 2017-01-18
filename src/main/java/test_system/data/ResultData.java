@@ -14,6 +14,6 @@ public final class ResultData {
     public ResultData(final WorkExecutionEntity workExecutionEntity) {
         this.questionsAmount = workExecutionEntity.getQuestionsAmount();
         this.correctQuestionsAmount = workExecutionEntity.getCorrectQuestionsAmount();
-        this.duration = TimeUnit.MILLISECONDS.toMinutes(workExecutionEntity.getEndTime().getTime() - workExecutionEntity.getStartTime().getTime());
+        this.duration = TimeUnit.MILLISECONDS.toMinutes(workExecutionEntity.getTestEndTime().getTime() - workExecutionEntity.getTestStartTime().getTime());
     }
 }

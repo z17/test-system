@@ -42,7 +42,7 @@ public class HolographyLab implements LabStrategy {
         BmpHelper.writeBmp(holoFile, holo);
         BmpHelper.writeBmp(holoRestoredFile, restoredHolo);
         final double coefficient = countCorrelationCoefficient(restoredHolo, image);
-        return new HolographyLabResult(holoFile, holoRestoredFile, coefficient);
+        return new HolographyLabResult(holoFile, holoRestoredFile, coefficient != Double.NaN ? coefficient : 0);
     }
 
     private Double[][] holoSynthesis(final Integer[][] image, double L, double d, double a) {
@@ -208,6 +208,10 @@ public class HolographyLab implements LabStrategy {
                 sum += v;
             }
         }
-        return (double) 1 / cols / rows * sum;
+
+        double stdevOne = MathHelper.stdev(first);
+        double stdevTwo = MathHelper.stdev(second);
+
+        return (double) 1 / cols / rows * sum / stdevOne / stdevTwo;
     }
 }

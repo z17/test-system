@@ -1,11 +1,12 @@
 package test_system.lab.helper;
 
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
-import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public final class MathHelper {
     public static Complex[][] cfft(final Integer[][] matrix) {
@@ -39,5 +40,15 @@ public final class MathHelper {
             }
         }
         return result;
+    }
+
+    public static <T extends Number> double stdev(T[][] first) {
+        double[] doubles = Stream.of(first)
+                .flatMap(Stream::of)
+                .mapToDouble(Number::doubleValue)
+                .toArray();
+
+        StandardDeviation sd = new StandardDeviation();
+        return sd.evaluate(doubles);
     }
 }
