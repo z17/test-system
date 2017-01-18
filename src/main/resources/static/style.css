@@ -134,3 +134,12 @@ ul.works-list li.work .delete {
     vertical-align: middle;
     margin: 0 5px;
 }
+
+.lab-result {
+    margin:20px 0;
+}
+
+.lab-result-image {
+    text-align: center;
+    margin: 15px;
+}

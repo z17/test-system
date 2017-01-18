@@ -28,11 +28,11 @@ public class HolographyLabTest {
         data.put(HolographyLab.L_HOLO_KEY, "632");
         data.put(HolographyLab.D_HOLO_KEY, "0.058");
 
-        HolographyLabResult result = lab.process(data, LabService.LAB_FILES_FOLDER, "1-");
+        HolographyLabResult result = lab.process(data, LabService.LAB_FILES_FOLDER_PATH, "1-");
 
         assertThat(result.getCorrelationCoefficient(), greaterThan(0.9));
-        assertThat(Files.exists(result.getPathToHolography()), is(true));
-        assertThat(Files.exists(result.getPathToRestored()), is(true));
+        assertThat(Files.exists(LabService.STATIC_FOLDER_PATH.resolve(result.getPathToHolography())), is(true));
+        assertThat(Files.exists(LabService.STATIC_FOLDER_PATH.resolve(result.getPathToRestored())), is(true));
     }
 
 }

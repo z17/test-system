@@ -1,5 +1,6 @@
 package test_system.controller;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -27,16 +28,18 @@ public class LabController extends AbstractController  {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/work/{id}/lab", method = RequestMethod.GET)
     public String labPage(@PathVariable final long id, final Model model) {
-        final String labTemplate = labService.labPage(id);
+        model.addAttribute("data", labService.getLabResult(id));
         model.addAttribute("workId", id);
+        val labTemplate = labService.getTemplate(id);
         return run(labTemplate, model);
     }
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/work/{id}/lab", method = RequestMethod.POST)
     public String labSendPage(@PathVariable final long id, @RequestParam("image") MultipartFile file, @RequestParam final Map<String, String> data, final Model model) {
-        final String labTemplate = labService.processLab(id, file, data);
+        model.addAttribute("data", labService.processLab(id, file, data));
         model.addAttribute("workId", id);
+        val labTemplate = labService.getTemplate(id);
         return run(labTemplate, model);
     }
 

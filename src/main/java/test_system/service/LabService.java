@@ -1,5 +1,6 @@
 package test_system.service;
 
+import com.google.gson.Gson;
 import lombok.val;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import test_system.lab.LabResult;
 import test_system.lab.LabStrategy;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,11 +25,13 @@ public class LabService {
     private final WorkExecutionService workExecutionService;
 
     // todo: to properties
-    public static final Path LAB_FILES_FOLDER = Paths.get("C:\\Java\\projects\\test-system\\labs");
+    public static final Path STATIC_FOLDER_PATH = Paths.get("src/main/resources/static/");
+    public static final Path LAB_FILES_FOLDER_PATH = STATIC_FOLDER_PATH.resolve("lab");
+    public static final String LAB_FILES_FOLDER = "lab";
 
     @PostConstruct
     public void init() throws IOException {
-        Files.createDirectories(LAB_FILES_FOLDER);
+        Files.createDirectories(LAB_FILES_FOLDER_PATH);
     }
 
     @Autowired
@@ -36,40 +40,48 @@ public class LabService {
         this.workExecutionService = workExecutionService;
     }
 
-    public String labPage(final long workId) {
-        val work = checkLab(workId);
+    public LabResult getLabResult(final long workId) {
+        val processingWork = checkLab(workId);
+        if (processingWork.getLabResult() == null) {
+            return null;
+        }
 
-        return work.getLab().getTemplate();
+        val textResult = processingWork.getLabResult().getText();
+        return new Gson().fromJson(textResult, processingWork.getWork().getLab().getResultClass());
     }
 
-    public String processLab(final long workId, final MultipartFile file, final Map<String, String> data) {
-        val work = checkLab(workId);
-
-        val processingWork = workExecutionService.getProcessingWork(workId);
+    public LabResult processLab(final long workId, final MultipartFile file, final Map<String, String> data) {
+        val processingWork = checkLab(workId);
 
         try {
-            val filePath = getLabFileName(processingWork, file);
-            file.transferTo(filePath.toFile());
+            val filePath = getLabFileName(processingWork, file.getOriginalFilename());
+            file.transferTo(new File(filePath.toAbsolutePath().toString()));
             data.put(HolographyLab.FILE_KEY, filePath.toString());
-            LabResult result = runLab(work.getLab(), processingWork.getId(), data);
-            if ( processingWork.getLabResult() == null) {
-                processingWork.setLabResult(new LabResultEntity());
-            }
-            processingWork.getLabResult().setText(result.toJson());
-            workExecutionService.update(processingWork);
+            LabResult result = runLab(processingWork.getWork().getLab(), processingWork.getId(), data);
+            updateLabResult(processingWork, result);
+            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return work.getLab().getTemplate();
+    }
+
+    private void updateLabResult(final WorkExecutionEntity workExecution, final LabResult result) {
+        if ( workExecution.getLabResult() == null) {
+            val labResultEntity = new LabResultEntity();
+            labResultEntity.setWorkExecution(workExecution);
+            workExecution.setLabResult(labResultEntity);
+        }
+        workExecution.getLabResult().setText(result.toJson());
+        workExecutionService.update(workExecution);
     }
 
     public void finishLab(final long workId, final Map<String, String> data) {
-        val work = checkLab(workId);
+        val processingWork = checkLab(workId);
 
 //        runLab(work.getLab(), data);
     }
 
-    private WorkEntity checkLab(final long workId) {
+    private WorkExecutionEntity checkLab(final long workId) {
         val work = workService.getWork(workId);
 
         if (work.getLab() == Lab.EMPTY) {
@@ -85,13 +97,13 @@ public class LabService {
         if (processingWork.getPhase() != WorkPhase.LAB) {
             throw new RuntimeException("Access denied");
         }
-        return work;
+        return processingWork;
     }
 
     private LabResult runLab(final Lab lab, final long executionId, final Map<String, String> data) {
         try {
-            LabStrategy labStrategy = lab.getStrategy().newInstance();
-            return labStrategy.process(data, LAB_FILES_FOLDER, executionId + "-");
+            LabStrategy labStrategy = lab.getStrategyClass().newInstance();
+            return labStrategy.process(data, LAB_FILES_FOLDER_PATH, executionId + "-");
 
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
@@ -99,11 +111,13 @@ public class LabService {
         }
     }
 
-    private Path getLabFileName(final WorkExecutionEntity workExecutionEntity, final MultipartFile file) {
-        val originalFilename = file.getOriginalFilename();
-        val name = FilenameUtils.removeExtension(originalFilename);
-        val extension = FilenameUtils.getExtension(originalFilename);
-        return LAB_FILES_FOLDER.resolve(workExecutionEntity.getId() + "-" + name + "." + extension);
+    private Path getLabFileName(final WorkExecutionEntity workExecutionEntity, final String originalFileName) {
+        val name = FilenameUtils.removeExtension(originalFileName);
+        val extension = FilenameUtils.getExtension(originalFileName);
+        return LAB_FILES_FOLDER_PATH.resolve(workExecutionEntity.getId() + "-input-" + name + "." + extension);
     }
 
+    public String getTemplate(final long workId) {
+        return workService.getWork(workId).getLab().getTemplate();
+    }
 }
