@@ -54,9 +54,9 @@ public final class BmpHelper {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static Integer[][] readBmp(final String name) {
+    public static Integer[][] readBmp(final Path name) {
         try {
-            BufferedImage read = ImageIO.read(new File(name));
+            BufferedImage read = ImageIO.read(name.toFile());
             int[] opt = null;
             int[] pixels = read.getRaster().getPixels(0, 0, read.getWidth(), read.getHeight(), opt);
             Integer[][] result = new Integer[read.getHeight()][ read.getWidth()];

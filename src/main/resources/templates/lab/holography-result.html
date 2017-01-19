@@ -1,0 +1,25 @@
+<div class="lab-result" xmlns:th="http://www.thymeleaf.org">
+    <h3>Параметры</h3>
+    <div class="lab-input-image">
+        <img th:src="${result.labData.pathToInputImage}" alt=""/>
+        <br>Изображение
+    </div>
+    <p><b>Параметры голограммы</b></p>
+    <p>L = [[${result.labData.holoL}]] * 10<sup>-9</sup></p>
+    <p>a = [[${result.labData.holoA}]] * 10<sup>-6</sup></p>
+    <p>d = [[${result.labData.holoD}]]</p>
+    <p><b>Параметры восстанавленного изображения</b></p>
+    <p>L = [[${result.labData.repairL}]] * 10<sup>-9</sup></p>
+    <p>a = [[${result.labData.repairA}]] * 10<sup>-6</sup></p>
+    <p>d = [[${result.labData.repairD}]]</p>
+    <h3>Результат</h3>
+    <p>Коэффициент корреляции = [[${result.labData.correlationCoefficient}]]</p>
+    <div class="lab-result-image">
+        <img th:src="${result.labData.pathToHolography}" alt=""/>
+        <br>Голография
+    </div>
+    <div class="lab-result-image">
+        <img th:src="${result.labData.pathToRestored}" alt=""/>
+        <br>Восстановленное изображение
+    </div>
+</div>

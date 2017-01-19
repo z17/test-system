@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import test_system.entity.*;
 import test_system.lab.HolographyLab;
-import test_system.lab.LabResult;
+import test_system.lab.LabData;
 import test_system.lab.LabStrategy;
 
 import javax.annotation.PostConstruct;
@@ -41,24 +41,24 @@ public class LabService {
         this.workExecutionService = workExecutionService;
     }
 
-    public LabResult getLabResult(final long workId) {
+    public LabData getLabResult(final long workId) {
         val processingWork = checkLab(workId);
         if (processingWork.getLabResult() == null) {
             return null;
         }
 
         val textResult = processingWork.getLabResult().getText();
-        return new Gson().fromJson(textResult, processingWork.getWork().getLab().getResultClass());
+        return new Gson().fromJson(textResult, processingWork.getWork().getLab().getDataClass());
     }
 
-    public LabResult processLab(final long workId, final MultipartFile file, final Map<String, String> data) {
+    public LabData processLab(final long workId, final MultipartFile file, final Map<String, String> data) {
         val processingWork = checkLab(workId);
 
         try {
             val filePath = getLabFileName(processingWork, file.getOriginalFilename());
             file.transferTo(new File(filePath.toAbsolutePath().toString()));
             data.put(HolographyLab.FILE_KEY, filePath.toString());
-            LabResult result = runLab(processingWork.getWork().getLab(), processingWork.getId(), data);
+            LabData result = runLab(processingWork.getWork().getLab(), processingWork.getId(), data);
             updateLabResult(processingWork, result);
             return result;
         } catch (IOException e) {
@@ -66,7 +66,7 @@ public class LabService {
         }
     }
 
-    private void updateLabResult(final WorkExecutionEntity workExecution, final LabResult result) {
+    private void updateLabResult(final WorkExecutionEntity workExecution, final LabData result) {
         if ( workExecution.getLabResult() == null) {
             val labResultEntity = new LabResultEntity();
             labResultEntity.setWorkExecution(workExecution);
@@ -106,7 +106,7 @@ public class LabService {
         return processingWork;
     }
 
-    private LabResult runLab(final Lab lab, final long executionId, final Map<String, String> data) {
+    private LabData runLab(final Lab lab, final long executionId, final Map<String, String> data) {
         try {
             LabStrategy labStrategy = lab.getStrategyClass().newInstance();
             return labStrategy.process(data, LAB_FILES_FOLDER_PATH, executionId + "-");

@@ -6,6 +6,7 @@ import test_system.lab.helper.FunctionalHelper;
 import test_system.lab.helper.MathHelper;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class HolographyLab implements LabStrategy {
@@ -21,10 +22,10 @@ public class HolographyLab implements LabStrategy {
     private Complex[][] hc = null;
 
     @Override
-    public HolographyLabResult process(final Map<String, String> data, final Path pathToOutFolder, final String outPrefixName) {
+    public HolographyLabData process(final Map<String, String> data, final Path pathToOutFolder, final String outPrefixName) {
 
-        String fileName = data.get(FILE_KEY);
-        Integer[][] image = BmpHelper.readBmp(fileName);
+        Path inputFile = Paths.get(data.get(FILE_KEY));
+        Integer[][] image = BmpHelper.readBmp(inputFile);
         double holoL = Double.valueOf(data.get(L_HOLO_KEY)) * Math.pow(10, -9);
         double holoA = Double.valueOf(data.get(A_HOLO_KEY)) * Math.pow(10, -6);
         double holoD = Double.valueOf(data.get(D_HOLO_KEY));
@@ -42,7 +43,16 @@ public class HolographyLab implements LabStrategy {
         BmpHelper.writeBmp(holoFile, holo);
         BmpHelper.writeBmp(holoRestoredFile, restoredHolo);
         final double coefficient = countCorrelationCoefficient(restoredHolo, image);
-        return new HolographyLabResult(holoFile, holoRestoredFile, coefficient != Double.NaN ? coefficient : 0);
+        return new HolographyLabData(inputFile,
+                Double.valueOf(data.get(L_HOLO_KEY)),
+                Double.valueOf(data.get(A_HOLO_KEY)),
+                Double.valueOf(data.get(D_HOLO_KEY)),
+                Double.valueOf(data.get(L_REPAIR_KEY)),
+                Double.valueOf(data.get(A_REPAIR_KEY)),
+                Double.valueOf(data.get(D_REPAIR_KEY)),
+                holoFile,
+                holoRestoredFile,
+                coefficient != Double.NaN ? coefficient : 0);
     }
 
     private Double[][] holoSynthesis(final Integer[][] image, double L, double d, double a) {

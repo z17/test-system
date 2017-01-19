@@ -139,7 +139,8 @@ ul.works-list li.work .delete {
     margin:20px 0;
 }
 
-.lab-result-image {
+.lab-result-image, .lab-input-image {
     text-align: center;
     margin: 15px;
+    max-width:800px;
 }

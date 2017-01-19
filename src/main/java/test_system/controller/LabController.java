@@ -45,7 +45,7 @@ public class LabController extends AbstractController  {
 
 
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/work/{id}/labComplete", method = RequestMethod.GET)
+    @RequestMapping(value = "/work/{id}/labComplete", method = RequestMethod.POST)
     public String labComplete(@PathVariable final long id) {
         labService.finishLab(id);
         return "redirect:/work/" + id + "/finish";

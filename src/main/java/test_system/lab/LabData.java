@@ -1,5 +1,5 @@
 package test_system.lab;
 
-public interface LabResult {
+public interface LabData {
     String toJson();
 }

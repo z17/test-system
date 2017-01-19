@@ -8,14 +8,14 @@
     <div class="content">
         <h1>Результаты</h1>
         <div class="test-result">
-        <h2>Тест</h2>
-        <p><b>Количество вопросов:</b> [[${result.questionsAmount}]]</p>
-        <p><b>Количество верных ответов:</b> [[${result.correctQuestionsAmount}]]</p>
-        <p><b>Время прохождения теста:</b> [[${result.duration}]] минут</p>
+            <h2>Тест</h2>
+            <p><b>Количество вопросов:</b> [[${result.questionsAmount}]]</p>
+            <p><b>Количество верных ответов:</b> [[${result.correctQuestionsAmount}]]</p>
+            <p><b>Время прохождения теста:</b> [[${result.duration}]] минут</p>
         </div>
-        <div class="lab-result">
+        <div class="lab-result" th:if="${result.labData != null}">
             <h2>Лабораторная работа</h2>
-
+            <th:block th:include="${result.labResultTemplate}"/>
         </div>
     </div>
 </div>

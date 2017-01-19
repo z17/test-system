@@ -30,7 +30,7 @@ public class HolographyLabTest {
         data.put(HolographyLab.L_HOLO_KEY, "632");
         data.put(HolographyLab.D_HOLO_KEY, "0.058");
 
-        HolographyLabResult result = lab.process(data, LabService.LAB_FILES_FOLDER_PATH, "56-");
+        HolographyLabData result = lab.process(data, LabService.LAB_FILES_FOLDER_PATH, "56-");
 
         assertThat(result.getCorrelationCoefficient(), greaterThan(0.9));
         assertThat(result.getCorrelationCoefficient(), lessThan(1.0));
