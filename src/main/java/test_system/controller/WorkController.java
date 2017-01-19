@@ -61,7 +61,7 @@ public class WorkController extends AbstractController {
     @RequestMapping(value = "/work/{id}/finish", method = RequestMethod.GET)
     public String finish(@PathVariable final long id, final Model model) {
         // todo: show attempt page instead finish page
-        model.addAttribute("result", workService.finishPage(id));
+        model.addAttribute("data", workService.finishPage(id));
         return run(Template.TEST_RESULT_PAGE_TEMPLATE, model);
     }
 }

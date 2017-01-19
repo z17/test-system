@@ -242,8 +242,7 @@ public class TestService {
         }
 
         if (workExecution.getPhase() != WorkPhase.THEORY) {
-            // todo: other message
-            throw new RuntimeException("Access is denied");
+            throw new RuntimeException("This test already started");
         }
 
         workExecution.setPhase(WorkPhase.TEST);

@@ -47,8 +47,7 @@ public class LabService {
             return null;
         }
 
-        val textResult = processingWork.getLabResult().getText();
-        return new Gson().fromJson(textResult, processingWork.getWork().getLab().getDataClass());
+        return getLabData(processingWork.getLabResult(), processingWork.getWork().getLab());
     }
 
     public LabData processLab(final long workId, final MultipartFile file, final Map<String, String> data) {
@@ -125,5 +124,9 @@ public class LabService {
 
     public String getTemplate(final long workId) {
         return workService.getWork(workId).getLab().getTemplate();
+    }
+
+    LabData getLabData(final LabResultEntity labResultEntity, final Lab lab) {
+        return new Gson().fromJson(labResultEntity.getText(), lab.getDataClass());
     }
 }

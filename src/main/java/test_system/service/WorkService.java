@@ -8,13 +8,11 @@ import test_system.data.ResultData;
 import test_system.data.WorkCreateData;
 import test_system.data.WorkData;
 import test_system.entity.WorkEntity;
-import test_system.entity.WorkExecutionEntity;
-import test_system.entity.WorkPhase;
 import test_system.exception.NotFoundException;
-import test_system.repository.WorkExecutionRepository;
 import test_system.repository.WorkRepository;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
@@ -30,6 +28,9 @@ public class WorkService {
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private LabService labService;
 
     @Autowired
     public WorkService(final WorkRepository workRepository) {
@@ -100,6 +101,25 @@ public class WorkService {
 
     public ResultData finishPage(final long workId) {
         val workExecutionEntity = workExecutionService.getFinishedAttempt(workId);
-        return new ResultData(workExecutionEntity);
+
+        long testDuration = TimeUnit.MILLISECONDS.toMinutes(workExecutionEntity.getTestEndTime().getTime() - workExecutionEntity.getTestStartTime().getTime());
+        if (workExecutionEntity.getLabResult() != null) {
+            return new ResultData(
+                    workExecutionEntity.getQuestionsAmount(),
+                    workExecutionEntity.getCorrectQuestionsAmount(),
+                    testDuration,
+                    labService.getLabData(workExecutionEntity.getLabResult(), workExecutionEntity.getWork().getLab()),
+                    workExecutionEntity.getWork().getLab().getResultTemplate()
+            );
+        }
+
+        return new ResultData(
+                workExecutionEntity.getQuestionsAmount(),
+                workExecutionEntity.getCorrectQuestionsAmount(),
+                testDuration,
+                null,
+                null
+        );
+
     }
 }

@@ -35,6 +35,11 @@
                 </li>
             </ul>
         </div>
+
+        <div class="lab-result" th:if="${data.labData != null}">
+            <h2>Лабораторная работа</h2>
+            <th:block th:include="${data.labResultTemplate}"/>
+        </div>
     </div>
 
 </div>
