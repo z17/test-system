@@ -9,12 +9,11 @@
 In `src/main/resources/application.properties` there are the following lines: 
 
     spring.datasource.url=jdbc:h2:file:./db/test-system
-    server.port=9000
+    server.port=8080
     
 `./db/test-system` - path to database files (in this case `./db/test-system.mv.db`)
 
-`9000` - server port. App launch at `http://localhost:9000`
-
+`8080` - server port. App launch at `http://localhost:8080`
 
 ### Default user
 

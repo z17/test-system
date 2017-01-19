@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>Лабораторная работа по Голографии</h1>
+
+        <form method="POST" class="form form-lab" enctype="multipart/form-data"
+              th:data-finish-url="'/work/' + ${workId} + '/labComplete'">
+
+            <div class="lab-input-image" th:if="${data} != null">
+                <img th:src="${data.pathToInputImage}" alt=""/>
+                <br>Исходное изображение
+            </div>
+
+            <div class="field">
+                <label for="image" class="label wide">Исходное изображение (bmp):</label>
+                <input type="file" id="image" name="image" accept="image/bmp" required/>
+            </div>
+
+            <h2>Параметры голограммы</h2>
+            <div class="field">
+                <label for="holo-l" class="label">L:</label>
+                <input type="number" step="0.01" id="holo-l" name="holo-l" th:value="${data != null ? data.holoL : '0.00'}" required/> * 10<sup>-9</sup>
+            </div>
+            <div class="field">
+                <label for="holo-a" class="label">a:</label>
+                <input type="number" step="0.01" id="holo-a" name="holo-a" th:value="${data != null ? data.holoA : '0.00'}" required/> * 10<sup>-6</sup>
+            </div>
+            <div class="field">
+                <label for="holo-d" class="label">d:</label>
+                <input type="number" step="0.001" id="holo-d" name="holo-d" th:value="${data != null ? data.holoD : '0.000'}" required/>
+            </div>
+            <h2>Параметры восстанавленного изображения</h2>
+            <div class="field">
+                <label for="repair-l" class="label">L:</label>
+                <input type="number" step="0.01" id="repair-l" name="repair-l" th:value="${data != null ? data.repairL : '0.00'}" required/> * 10<sup>-9</sup>
+            </div>
+            <div class="field">
+                <label for="repair-a" class="label">a:</label>
+                <input type="number" step="0.01" id="repair-a" name="repair-a" th:value="${data != null ? data.repairA : '0.00'}" required/> * 10<sup>-6</sup>
+            </div>
+            <div class="field">
+                <label for="repair-d" class="label">d:</label>
+                <input type="number" step="0.001" id="repair-d" name="repair-d" th:value="${data != null ? data.repairD : '0.000'}" required/>
+            </div>
+
+            <div class="lab-result" th:if="${data} != null">
+                <h2>Результат</h2>
+                <p>Коэффициент корреляции = [[${data.correlationCoefficient}]]</p>
+                <div class="lab-result-image">
+                    <img th:src="${data.pathToHolography}" alt=""/>
+                    <br>Голография
+                </div>
+                <div class="lab-result-image">
+                    <img th:src="${data.pathToRestored}" alt=""/>
+                    <br>Восстановленное изображение
+                </div>
+                </p>
+            </div>
+
+            <div class="field">
+                <input type="submit" name="submit-lab" class="submit-lab" value="Отправить"/>
+            </div>
+        </form>
+
+        <form method="POST" class="form" th:action="'/work/' + ${workId} + '/labComplete'" th:if="${data} != null">
+            <div class="field">
+                <input type="submit" name="finish-lab" class="finish-lab" value="Закончить"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

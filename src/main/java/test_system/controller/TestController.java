@@ -20,13 +20,11 @@ import java.util.Map;
 @Controller
 public class TestController extends AbstractController {
     private final TestService testService;
-    private final WorkService workService;
 
     @Autowired
-    public TestController(UserService userService, TestService testService, WorkService workService) {
+    public TestController(UserService userService, TestService testService) {
         super(userService);
         this.testService = testService;
-        this.workService = workService;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -36,17 +34,10 @@ public class TestController extends AbstractController {
         return run(Template.TEST_PAGE_TEMPLATE, model);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @RequestMapping(value = "/work/{id}/finish", method = RequestMethod.POST)
-    public String sendTestAnswers(@PathVariable final long id, @RequestParam final MultiValueMap<String, String> data, final Model model) {
-        model.addAttribute("result", testService.finishPage(id, data));
-        return run(Template.TEST_RESULT_PAGE_TEMPLATE, model);
-    }
 
-    @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "/work/create", method = RequestMethod.GET)
-    public String create(final Model model) {
-//        model.addAttribute("work", workService.create());
-        return run(Template.WORK_CREATE_TEMPLATE, model);
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/work/{id}/testComplete", method = RequestMethod.POST)
+    public String testComplete(@PathVariable final long id, @RequestParam final MultiValueMap<String, String> data) {
+        return "redirect:/" + testService.finishTest(id, data);
     }
 }

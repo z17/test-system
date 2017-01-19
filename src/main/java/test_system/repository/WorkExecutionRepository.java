@@ -13,7 +13,9 @@ public interface WorkExecutionRepository extends CrudRepository<WorkExecutionEnt
 
     WorkExecutionEntity findByUserAndWorkAndPhaseNot(final UserEntity user, final WorkEntity work, final WorkPhase phase);
 
-    List<WorkExecutionEntity> findByWorkAndPhaseOrderByStartTimeDesc(final WorkEntity work, final WorkPhase finished);
+    List<WorkExecutionEntity> findByWorkAndPhaseOrderByTestStartTimeDesc(final WorkEntity work, final WorkPhase finished);
 
     List<WorkExecutionEntity> findByWorkAndUser(final WorkEntity work, final UserEntity user);
+
+    WorkExecutionEntity findFirstByUserAndWorkAndPhaseOrderByIdDesc(final UserEntity user, final WorkEntity work, final WorkPhase finished);
 }

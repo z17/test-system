@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import test_system.data.AnswerData;
 import test_system.data.QuestionData;
-import test_system.data.ResultData;
 import test_system.entity.*;
 import test_system.exception.NotFoundException;
 import test_system.repository.AnswerRepository;
@@ -14,6 +13,7 @@ import test_system.repository.QuestionRepository;
 import test_system.repository.TestRepository;
 import test_system.repository.WorkAnswerRepository;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,14 +29,16 @@ public class TestService {
     private final WorkAnswerRepository workAnswerRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final WorkExecutionService workExecutionService;
 
     @Autowired
-    public TestService(TestRepository testRepository, WorkService workService, WorkAnswerRepository workAnswerRepository, QuestionRepository questionRepository, AnswerRepository answerRepository) {
+    public TestService(TestRepository testRepository, WorkService workService, WorkAnswerRepository workAnswerRepository, QuestionRepository questionRepository, AnswerRepository answerRepository, WorkExecutionService workExecutionService) {
         this.testRepository = testRepository;
         this.workService = workService;
         this.workAnswerRepository = workAnswerRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+        this.workExecutionService = workExecutionService;
     }
 
     TestEntity getTestByWorkId(final long workId) {
@@ -51,17 +53,24 @@ public class TestService {
     public TestEntity testPage(final long workId) {
         val test = getTestByWorkId(workId);
 
-        workService.workProcess(workId, WorkPhase.TEST);
-
+        startTest(workId);
         return test;
     }
 
-    public ResultData finishPage(final long workId, final MultiValueMap<String, String> testResultData) {
+    public String finishTest(final long workId, final MultiValueMap<String, String> testResultData) {
         val test = getTestByWorkId(workId);
+        val work = workService.getWork(workId);
 
-        val workExecutionEntity = workService.workProcess(workId, WorkPhase.FINISHED);
+        val workExecution = workExecutionService.getProcessingWork(workId);
+        if (workExecution == null) {
+            throw new RuntimeException("Access is denied");
+        }
 
-        final List<WorkAnswerEntity> answers = processTestResultData(workExecutionEntity, testResultData);
+        if (workExecution.getPhase() != WorkPhase.TEST) {
+            throw new RuntimeException("Access is denied");
+        }
+
+        final List<WorkAnswerEntity> answers = processTestResultData(workExecution, testResultData);
         workAnswerRepository.save(answers);
 
         List<Long> answerIds = answers.stream().map(WorkAnswerEntity::getAnswerId).collect(Collectors.toList());
@@ -76,8 +85,23 @@ public class TestService {
             }
         }
 
-        val result = workService.finishTest(workExecutionEntity, correctQuestionCount, test.getQuestions().size());
-        return new ResultData(result);
+        // todo: refactor this
+        String url;
+        if (work.getLab() != Lab.EMPTY && work.getLab() != null) {
+            workExecution.setPhase(WorkPhase.LAB);
+            url = "work/" + workId + "/lab";
+        } else {
+            workExecution.setPhase(WorkPhase.FINISHED);
+            url = "work/" + workId + "/finish";
+        }
+
+        workExecution.setCorrectQuestionsAmount(correctQuestionCount);
+        workExecution.setQuestionsAmount(test.getQuestions().size());
+        workExecution.setTestEndTime(new Timestamp(System.currentTimeMillis()));
+
+        workExecutionService.update(workExecution);
+
+        return url;
     }
 
     private List<WorkAnswerEntity> processTestResultData(final WorkExecutionEntity workExecution, final MultiValueMap<String, String> testResultData) {
@@ -204,5 +228,25 @@ public class TestService {
                     answer.setCorrect(a.isCorrect());
                     return answer;
                 }).collect(Collectors.toList());
+    }
+
+    private void startTest(final long workId) {
+        WorkExecutionEntity workExecution = workExecutionService.getProcessingWork(workId);
+
+        if (workExecution == null) {
+            throw new RuntimeException("Access is denied");
+        }
+
+        if (workExecution.getPhase() == WorkPhase.TEST) {
+            return;
+        }
+
+        if (workExecution.getPhase() != WorkPhase.THEORY) {
+            throw new RuntimeException("This test already started");
+        }
+
+        workExecution.setPhase(WorkPhase.TEST);
+        workExecution.setTestStartTime(new Timestamp(System.currentTimeMillis()));
+        workExecutionService.update(workExecution);
     }
 }

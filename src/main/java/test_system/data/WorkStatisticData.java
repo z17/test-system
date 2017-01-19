@@ -9,9 +9,12 @@ import java.util.List;
 public final class WorkStatisticData {
     private final String name;
     private final int correctPercent;
-    private final int time;
+    private final int timeTest;
     private final int attempts;
     private final List<QuestionData<StatisticAnswerData>> questions;
-
     private final List<WorkExecutionEntity> attemptsList;
+
+
+    private final boolean lab;
+    private final int timeLab;
 }

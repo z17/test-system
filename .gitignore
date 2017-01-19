@@ -1,9 +1,9 @@
 .idea/
 .gradle/
-/gradle/
 /out/
 /tmp/
 /target/
 /classes/
 /build/
+/data/
 /db/

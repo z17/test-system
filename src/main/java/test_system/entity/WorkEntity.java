@@ -19,15 +19,7 @@ public class WorkEntity {
     @Column(name = "description")
     private String description;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    @Column(name="lab")
+    @Enumerated(EnumType.STRING)
+    private Lab lab;
 }

@@ -25,11 +25,11 @@ public class WorkExecutionEntity {
     @Enumerated(value = EnumType.STRING)
     private WorkPhase phase;
 
-    @Column(name = "start_time", insertable = false, updatable = false)
-    private Timestamp startTime;
+    @Column(name = "start_time")
+    private Timestamp testStartTime;
 
     @Column(name = "end_time")
-    private Timestamp endTime;
+    private Timestamp testEndTime;
 
     @Column(name = "correct_questions")
     private int correctQuestionsAmount;
@@ -37,4 +37,6 @@ public class WorkExecutionEntity {
     @Column(name = "questions")
     private int questionsAmount;
 
+    @OneToOne(mappedBy = "workExecution", cascade = CascadeType.ALL)
+    private LabResultEntity labResult;
 }

@@ -1,13 +1,20 @@
 package test_system.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import test_system.exception.NotFoundException;
+import test_system.service.UserService;
 
 @SuppressWarnings("unused")
 @ControllerAdvice
-public class RestControllerAdvice {
+public class RestControllerAdvice  extends AbstractController {
+
+    @Autowired
+    protected RestControllerAdvice(UserService userService) {
+        super(userService);
+    }
 
     @ExceptionHandler(Exception.class)
     final String handle(final Exception exception, final Model model) {
@@ -17,9 +24,9 @@ public class RestControllerAdvice {
 
         // todo: lets save template in class of exception by the custom annotations
         if (exception instanceof NotFoundException) {
-            return Template.ERROR_404_TEMPLATE;
+            return run(Template.ERROR_404_TEMPLATE, model);
         }
 
-        return Template.ERROR_TEMPLATE;
+        return run(Template.ERROR_TEMPLATE, model);
     }
 }

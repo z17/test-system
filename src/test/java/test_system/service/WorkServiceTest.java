@@ -60,7 +60,8 @@ public class WorkServiceTest extends AbstractTest {
                 "desc",
                 "theory",
                 "test",
-                Collections.singletonList(question));
+                Collections.singletonList(question),
+                Lab.EMPTY);
         val work = service.updateWork(data);
         val test = testRepository.findByWorkId(work.getId());
 
@@ -99,7 +100,8 @@ public class WorkServiceTest extends AbstractTest {
                 "desc",
                 "theory",
                 "test",
-                Arrays.asList(question1, question2));
+                Arrays.asList(question1, question2),
+                Lab.EMPTY);
         val work = service.updateWork(newData);
         val test = testRepository.findByWorkId(work.getId());
 
@@ -121,7 +123,8 @@ public class WorkServiceTest extends AbstractTest {
                 "new Descriptin",
                 "new theory",
                 "new test",
-                Arrays.asList(updateQuestion1, newQuestion2)
+                Arrays.asList(updateQuestion1, newQuestion2),
+                Lab.EMPTY
         );
 
         WorkEntity workEntity = service.updateWork(updateData);
