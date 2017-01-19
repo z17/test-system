@@ -6,7 +6,7 @@
 <div class="wrapper">
     <th:block th:include="modules/menu"/>
     <div class="content">
-        <h1>Создать работу</h1>
+        <h1>Отредактировать работу</h1>
 
         <form method="POST" class="form form-work edit-work" th:data-id="${data.work.id}">
             <div class="field">
@@ -65,10 +65,13 @@
 
             <h2>Лабораторная работа</h2>
 
-            <select id="lab">
-                <option th:each="one : ${T(test_system.entity.Lab).values()}" th:text="${one.name}" th:value="${one}"
-                        th:selected="${data.work.lab == one}"></option>
-            </select>
+            <p>
+                <select id="lab">
+                    <option th:each="one : ${T(test_system.entity.Lab).values()}" th:text="${one.name}"
+                            th:value="${one}"
+                            th:selected="${data.work.lab == one}"></option>
+                </select>
+            </p>
 
             <input th:type="submit" class="submit-create" value="Сохранить"/>
         </form>

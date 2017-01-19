@@ -42,7 +42,7 @@ public class HolographyLab implements LabStrategy {
 
         BmpHelper.writeBmp(holoFile, holo);
         BmpHelper.writeBmp(holoRestoredFile, restoredHolo);
-        final double coefficient = countCorrelationCoefficient(restoredHolo, image);
+        final Double coefficient = countCorrelationCoefficient(restoredHolo, image);
         return new HolographyLabData(inputFile,
                 Double.valueOf(data.get(L_HOLO_KEY)),
                 Double.valueOf(data.get(A_HOLO_KEY)),
@@ -52,7 +52,7 @@ public class HolographyLab implements LabStrategy {
                 Double.valueOf(data.get(D_REPAIR_KEY)),
                 holoFile,
                 holoRestoredFile,
-                coefficient != Double.NaN ? coefficient : 0);
+                coefficient.isNaN() ? 0 : coefficient);
     }
 
     private Double[][] holoSynthesis(final Integer[][] image, double L, double d, double a) {
@@ -204,7 +204,7 @@ public class HolographyLab implements LabStrategy {
         return result;
     }
 
-    private double countCorrelationCoefficient(Double[][] first, Integer[][] second) {
+    private Double countCorrelationCoefficient(Double[][] first, Integer[][] second) {
         final int cols = FunctionalHelper.cols(first);
         final int rows = FunctionalHelper.rows(first);
 

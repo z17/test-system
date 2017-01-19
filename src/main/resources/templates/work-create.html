@@ -40,8 +40,10 @@
                     </div>
 
                     <div class="field">
-                        <input type="radio" class="question-type" name="question-type-1" value="SINGLE" checked/> Один ответ
-                        <input type="radio" class="question-type" name="question-type-1" value="MULTIPLY"/> Несколько ответов
+                        <input type="radio" class="question-type" name="question-type-1" value="SINGLE" checked/> Один
+                        ответ
+                        <input type="radio" class="question-type" name="question-type-1" value="MULTIPLY"/> Несколько
+                        ответов
                     </div>
 
                     <p>Ответы:</p>
@@ -59,12 +61,14 @@
             </ol>
 
             <h2>Лабораторная работа</h2>
+            <p>
+                <select id="lab">
+                    <option th:each="one : ${T(test_system.entity.Lab).values()}" th:text="${one.name}"
+                            th:value="${one}"></option>
+                </select>
+            </p>
 
-            <select id="lab">
-                <option th:each="one : ${T(test_system.entity.Lab).values()}" th:text="${one.name}" th:value="${one}"></option>
-            </select>
-
-            <input th:type="submit" class="submit-create" value="Сохранить"/>
+            <input th:type="submit" class="submit-create" value="Создать"/>
         </form>
 
         <div style="display:none">
