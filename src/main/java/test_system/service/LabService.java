@@ -117,7 +117,7 @@ public class LabService {
     }
 
     private Path getLabFileName(final WorkExecutionEntity workExecutionEntity, final String originalFileName) {
-        val name = FilenameUtils.removeExtension(originalFileName);
+        val name = FilenameUtils.getBaseName(originalFileName);
         val extension = FilenameUtils.getExtension(originalFileName);
         return LAB_FILES_FOLDER_PATH.resolve(workExecutionEntity.getId() + "-input-" + name + "." + extension);
     }
