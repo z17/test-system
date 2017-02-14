@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import test_system.entity.*;
+import test_system.exception.AccessDeniedException;
 import test_system.lab.HolographyLab;
 import test_system.lab.LabData;
 import test_system.lab.LabStrategy;
@@ -96,11 +97,11 @@ public class LabService {
         val processingWork = workExecutionService.getProcessingWork(workId);
 
         if (processingWork == null) {
-            throw new RuntimeException("Access denied");
+            throw new AccessDeniedException("Access denied");
         }
 
         if (processingWork.getPhase() != WorkPhase.LAB) {
-            throw new RuntimeException("Access denied");
+            throw new AccessDeniedException("Access denied");
         }
         return processingWork;
     }

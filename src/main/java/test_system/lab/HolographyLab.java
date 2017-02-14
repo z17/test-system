@@ -1,6 +1,8 @@
 package test_system.lab;
 
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.util.ArithmeticUtils;
+import test_system.exception.CustomRuntimeException;
 import test_system.lab.helper.BmpHelper;
 import test_system.lab.helper.FunctionalHelper;
 import test_system.lab.helper.MathHelper;
@@ -26,6 +28,13 @@ public class HolographyLab implements LabStrategy {
 
         Path inputFile = Paths.get(data.get(FILE_KEY));
         Integer[][] image = BmpHelper.readBmp(inputFile);
+        int cols = FunctionalHelper.cols(image);
+        int rows = FunctionalHelper.rows(image);
+
+        if (!ArithmeticUtils.isPowerOfTwo(cols) || !ArithmeticUtils.isPowerOfTwo(rows)) {
+            throw new CustomRuntimeException("Size of image must be a power of 2");
+        }
+
         double holoL = Double.valueOf(data.get(L_HOLO_KEY)) * Math.pow(10, -9);
         double holoA = Double.valueOf(data.get(A_HOLO_KEY)) * Math.pow(10, -6);
         double holoD = Double.valueOf(data.get(D_HOLO_KEY));

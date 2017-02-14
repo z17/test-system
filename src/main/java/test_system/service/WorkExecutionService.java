@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
+import test_system.exception.CustomRuntimeException;
 import test_system.exception.NotFoundException;
 import test_system.repository.WorkExecutionRepository;
 
@@ -51,12 +52,12 @@ public class WorkExecutionService {
         val currentExecutions = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
         if (!currentExecutions.isEmpty()) {
             if (currentExecutions.size() > 1) {
-                throw new RuntimeException("Unknown Error");
+                throw new CustomRuntimeException("Unknown Error");
             }
 
             val currentExecution = currentExecutions.get(0);
             if (!currentExecution.getWork().equals(work) || currentExecution.getPhase() != WorkPhase.THEORY) {
-                throw new RuntimeException("Some work already started");
+                throw new CustomRuntimeException("Some work already started");
             } else {
                 return currentExecution;
             }
@@ -74,7 +75,7 @@ public class WorkExecutionService {
         val work = workService.getWork(workId);
         val activeAttempt = workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
         if (activeAttempt != null) {
-            throw new RuntimeException("Your work in progress");
+            throw new CustomRuntimeException("Your work in progress yet");
         }
 
         return workExecutionRepository.findFirstByUserAndWorkAndPhaseOrderByIdDesc(user, work, WorkPhase.FINISHED);

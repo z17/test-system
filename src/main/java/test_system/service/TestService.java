@@ -7,6 +7,8 @@ import org.springframework.util.MultiValueMap;
 import test_system.data.AnswerData;
 import test_system.data.QuestionData;
 import test_system.entity.*;
+import test_system.exception.AccessDeniedException;
+import test_system.exception.CustomRuntimeException;
 import test_system.exception.NotFoundException;
 import test_system.repository.AnswerRepository;
 import test_system.repository.QuestionRepository;
@@ -63,11 +65,11 @@ public class TestService {
 
         val workExecution = workExecutionService.getProcessingWork(workId);
         if (workExecution == null) {
-            throw new RuntimeException("Access is denied");
+            throw new AccessDeniedException("Access is denied");
         }
 
         if (workExecution.getPhase() != WorkPhase.TEST) {
-            throw new RuntimeException("Access is denied");
+            throw new AccessDeniedException("Access is denied");
         }
 
         final List<WorkAnswerEntity> answers = processTestResultData(workExecution, testResultData);
@@ -234,7 +236,7 @@ public class TestService {
         WorkExecutionEntity workExecution = workExecutionService.getProcessingWork(workId);
 
         if (workExecution == null) {
-            throw new RuntimeException("Access is denied");
+            throw new AccessDeniedException("Access is denied");
         }
 
         if (workExecution.getPhase() == WorkPhase.TEST) {
@@ -242,7 +244,7 @@ public class TestService {
         }
 
         if (workExecution.getPhase() != WorkPhase.THEORY) {
-            throw new RuntimeException("This test already started");
+            throw new CustomRuntimeException("This test already started");
         }
 
         workExecution.setPhase(WorkPhase.TEST);
