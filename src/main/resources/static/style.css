@@ -6,6 +6,12 @@ body {
     background: #fafafa;
 }
 
+.clear:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
 .wrapper {
     width: 1000px;
     margin: 0 auto;
@@ -164,10 +170,4 @@ ul.works-list li.work .delete {
 .gallery .file img {
     max-width: 100%;
     min-width: 100%;
-}
-
-.gallery:after {
-    content: '';
-    display: block;
-    clear: both;
 }

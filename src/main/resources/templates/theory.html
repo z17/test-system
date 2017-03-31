@@ -5,9 +5,9 @@
 <body th:inline="text">
 <div class="wrapper">
     <th:block th:include="modules/menu"/>
-    <div class="content">
+    <div class="content clear">
         <h1>Часть 1: Теория</h1>
-        <div>[[${theory.text}]]</div>
+        <div th:utext="${theory.text}"></div>
         <p>
             <a th:href="@{'/work/' + ${theory.workId}} + '/test'">К тесту</a>
         </p>

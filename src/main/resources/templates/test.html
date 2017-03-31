@@ -5,9 +5,9 @@
 <body th:inline="text">
 <div class="wrapper">
     <th:block th:include="modules/menu"/>
-    <div class="content">
+    <div class="content clear">
         <h1>Часть 2: Тест</h1>
-        <div>[[${test.description}]]</div>
+        <div th:utext="${test.description}"></div>
         <form th:action="@{/work/{id}/testComplete(id=${test.workId})}" method="POST" class="form">
             <div class="questions">
                 <div class="questions" th:each="question : ${test.questions}">

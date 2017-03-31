@@ -115,4 +115,12 @@ $(document).ready(function () {
        }
        return true;
     });
+
+    // CKEditor
+    if ($('.form-work').length != 0) {
+        CKEDITOR.replace("description");
+        CKEDITOR.replace("theory");
+        CKEDITOR.replace("test-description");
+    }
+
 });
