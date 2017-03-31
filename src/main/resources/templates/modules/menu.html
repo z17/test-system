@@ -4,6 +4,7 @@
         <a href="/" class="menu-item">Главная</a>
         <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}" href="/users" class="menu-item">Пользователи</a>
         <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}" href="/statistic" class="menu-item">Статистика</a>
+        <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}" href="/gallery" class="menu-item">Галерея</a>
 
 
         <a th:if="${user != null}" href="/logout" class="menu-item right">Выход</a>

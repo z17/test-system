@@ -11,7 +11,7 @@ import test_system.service.UserService;
 
 @SuppressWarnings("unused")
 @ControllerAdvice
-public class RestControllerAdvice  extends AbstractController {
+public class RestControllerAdvice extends AbstractController {
 
     @Autowired
     protected RestControllerAdvice(UserService userService) {
@@ -21,6 +21,8 @@ public class RestControllerAdvice  extends AbstractController {
     @ExceptionHandler(Exception.class)
     final String handle(final Exception exception, final Model model) {
         exception.printStackTrace();
+
+        setupUser(model);
 
         if (exception instanceof AbstractRuntimeException || exception instanceof AccessDeniedException) {
             model.addAttribute("reason", exception.getMessage());

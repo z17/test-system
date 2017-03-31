@@ -7,8 +7,8 @@
     <th:block th:include="modules/menu"/>
     <div class="content">
         <h1>Список задач</h1>
-        <ul class="works-list" th:each="work : ${works}">
-            <li class="work">
+        <ul class="works-list">
+            <li class="work" th:each="work : ${works}">
                 <a th:href="@{'/work/' + ${work.id}}" th:text="${work.name}">Имя задачи</a>
                 <a th:if="${user != null && user.role == T(test_system.entity.Role).ROLE_ADMIN}"
                    th:href="@{'/work/' + ${work.id} + '/edit' }" title="Редактировать"><img src="/img/edit.png"

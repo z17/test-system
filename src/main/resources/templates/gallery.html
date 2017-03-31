@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:include="modules/header"/>
+<body th:inline="text">
+<div class="wrapper">
+    <th:block th:include="modules/menu"/>
+    <div class="content">
+        <h1>Галерея</h1>
+        <p>
+            Тут выводятся все изображения, которые находятся в папке src/main/resources/static/gallery
+        </p>
+        <div class="gallery">
+            <div th:if="${files.isEmpty()}">
+                Изображения не найдены
+            </div>
+            <div class="file" th:each="file : ${files}">
+                <a th:href="${file.src}" target="_blank"><img th:src="${file.src}" th:alt="${file.name}"/></a><br>
+                [[${file.name}]]
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

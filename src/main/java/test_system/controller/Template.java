@@ -21,4 +21,6 @@ final class Template {
 
     static final String WORK_CREATE_TEMPLATE = "work-create";
     static final String EDIT_PAGE_TEMPLATE = "work-edit";
+
+    static final String  GALLERY_TEMPLATE = "gallery";
 }

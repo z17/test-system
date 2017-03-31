@@ -16,7 +16,11 @@ public abstract class AbstractController {
     }
 
     String run(final String template, final Model model) {
-        model.addAttribute("user", userService.getCurrentUser());
+        setupUser(model);
         return template;
+    }
+
+    void setupUser(final Model model) {
+        model.addAttribute("user", userService.getCurrentUser());
     }
 }

@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: #fafafa;
 }
@@ -54,8 +58,8 @@ body {
     display: inline-block;
 }
 
-
 ul.works-list li.work {
+    margin: 15px 0;
 }
 
 ul.works-list li.work .delete {
@@ -101,18 +105,18 @@ ul.works-list li.work .delete {
 }
 
 .form.form-work .answers {
-    margin-left:25px;
+    margin-left: 25px;
 }
 
 .form.form-work .add, .form.form-work .delete {
     border: 1px solid #aaaaaa;
     display: inline-block;
-    padding:4px 10px;
+    padding: 4px 10px;
     cursor: pointer;
 }
 
 .form.form-work .delete {
-    margin-left:10px;
+    margin-left: 10px;
 }
 
 .form.form-work .answers .answer.field:only-of-type .deleteAnswer {
@@ -129,18 +133,41 @@ ul.works-list li.work .delete {
 }
 
 .edit-icon, .delete-icon {
-    width:15px;
-    height:15px;
+    width: 15px;
+    height: 15px;
     vertical-align: middle;
     margin: 0 5px;
 }
 
 .lab-result {
-    margin:20px 0;
+    margin: 20px 0;
 }
 
 .lab-result-image, .lab-input-image {
     text-align: center;
     margin: 15px;
-    max-width:800px;
+    max-width: 800px;
+}
+
+.gallery {
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.gallery .file {
+    width: 33%;
+    min-width: 250px;
+    float: left;
+    padding: 10px;
+}
+
+.gallery .file img {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.gallery:after {
+    content: '';
+    display: block;
+    clear: both;
 }
