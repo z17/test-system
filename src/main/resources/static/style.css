@@ -123,6 +123,7 @@ ul.works-list li.work .delete {
 
 .form.form-work .delete {
     margin-left: 10px;
+    margin-top: 10px;
 }
 
 .form.form-work .answers .answer.field:only-of-type .deleteAnswer {

@@ -16,19 +16,19 @@
 
             <div class="field">
                 <label for="description" class="label">Описание работы:</label>
-                <textarea name="description" id="description" th:text="${data.work.description}" required></textarea>
+                <textarea name="description" id="description" class="editor" th:text="${data.work.description}" required></textarea>
             </div>
 
             <div class="field">
                 <h2>Теория</h2>
-                <textarea name="theory" id="theory" th:text="${data.theory.text}" required></textarea>
+                <textarea name="theory" id="theory" class="editor" th:text="${data.theory.text}" required></textarea>
             </div>
 
             <h2>Тест</h2>
 
             <div class="field">
                 <label for="test-description" class="label">Описание теста:</label>
-                <textarea name="test-description" id="test-description" th:text="${data.test.description}"
+                <textarea name="test-description" id="test-description" class="editor" th:text="${data.test.description}"
                           required></textarea>
             </div>
 
@@ -36,8 +36,8 @@
                 <li class="question" th:each="question,id: ${data.test.questions}" th:data-id="${question.id}">
                     <div class="field">
                         <label class="label">Текст вопроса:</label>
-                        <input th:type="text" class="question-text" th:value="${question.text}" required/> <span
-                            class="delete deleteQuestion">-</span>
+                        <textarea class="question-text editor" name="question" th:text="${question.text}" required></textarea>
+                        <span class="delete deleteQuestion">-</span>
                     </div>
                     <div class="field">
                         <input type="radio" class="question-type" value="SINGLE"
@@ -86,7 +86,7 @@
             <li class="question sample">
                 <div class="field">
                     <label class="label">Текст вопроса:</label>
-                    <input th:type="text" class="question-text" required/> <span
+                    <textarea th:type="text" class="question-text editor" required></textarea> <span
                         class="delete deleteQuestion">-</span>
                 </div>
 

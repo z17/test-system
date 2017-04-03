@@ -24,19 +24,23 @@ $(document).ready(function () {
         a.insertAfter(answers.find('.field.answer:last'));
     }
 
-    $('.addAnswer').click(addAnswerFunction);
-
-    $('.addQuestion').click(function () {
-        let questions = $(this).closest('ol.questions');
+    function addQuestion() {
         let newQuestion = $('.question.sample').clone();
         newQuestion.removeClass('sample');
         bindAnswerDelete($(newQuestion).find('.answers .answer:first'));
         $(newQuestion).find('.answers .addAnswer').click(addAnswerFunction);
         $(newQuestion).find('.question-type').attr('name', 'question-type-' + ($('ol.questions li.question').length + 1));
-        newQuestion.insertAfter(questions.find('.question:last'));
-    });
+        newQuestion.insertBefore($('.addQuestion'));
+        CKEDITOR.replace(newQuestion.find('.editor').get(0));
+        $(newQuestion).find('.deleteQuestion').click(deleteQuestion);
+    }
+
+    $('.addAnswer').click(addAnswerFunction);
+
+    $('.addQuestion').click(addQuestion);
 
     $('.deleteAnswer').click(deleteAnswer);
+
     $('.deleteQuestion').click(deleteQuestion);
 
     $(document).on('submit', 'form.form-work', function () {
@@ -118,9 +122,11 @@ $(document).ready(function () {
 
     // CKEditor
     if ($('.form-work').length != 0) {
-        CKEDITOR.replace("description");
-        CKEDITOR.replace("theory");
-        CKEDITOR.replace("test-description");
+        CKEDITOR.replaceAll("editor");
+    }
+
+    if ($('.create-work').length != 0) {
+        // addQuestion();
     }
 
 });

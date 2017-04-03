@@ -11,7 +11,7 @@
         <form th:action="@{/work/{id}/testComplete(id=${test.workId})}" method="POST" class="form">
             <div class="questions">
                 <div class="questions" th:each="question : ${test.questions}">
-                    <p>[[${question.text}]]</p>
+                    <p th:utext="${question.text}"></p>
                     <div th:each="answer: ${question.answers}">
                         <input th:type="${question.type == T(test_system.entity.QuestionType).SINGLE ? 'radio' : 'checkbox'}"
                                type="radio" th:name="'question-' + ${question.id}" th:value="${answer.id}" th:required="${question.type == T(test_system.entity.QuestionType).SINGLE}" />

@@ -16,47 +16,22 @@
 
             <div class="field">
                 <label for="description" class="label">Описание работы:</label>
-                <textarea name="description" id="description" required></textarea>
+                <textarea id="description" class="editor" required></textarea>
             </div>
 
             <div class="field">
                 <h2>Теория</h2>
-                <textarea name="theory" id="theory" required></textarea>
+                <textarea id="theory" class="editor" required></textarea>
             </div>
 
             <h2>Тест</h2>
 
             <div class="field">
                 <label for="test-description" class="label">Описание теста:</label>
-                <textarea name="test-description" id="test-description" required></textarea>
+                <textarea id="test-description" class="editor" required></textarea>
             </div>
 
             <ol class="questions">
-                <li class="question">
-                    <div class="field">
-                        <label class="label">Текст вопроса:</label>
-                        <input th:type="text" class="question-text" required/> <span
-                            class="delete deleteQuestion">-</span>
-                    </div>
-
-                    <div class="field">
-                        <input type="radio" class="question-type" name="question-type-1" value="SINGLE" checked/> Один
-                        ответ
-                        <input type="radio" class="question-type" name="question-type-1" value="MULTIPLY"/> Несколько
-                        ответов
-                    </div>
-
-                    <p>Ответы:</p>
-                    <ul class="answers">
-                        <li class="field answer">
-                            <input th:type="text" class="answer-field" required/> <input
-                                type="checkbox" class="correct-field"/> Верный? <span
-                                class="delete deleteAnswer">-</span>
-                        </li>
-                        <div class="add addAnswer">+</div>
-                    </ul>
-                </li>
-
                 <div class="add addQuestion">+</div>
             </ol>
 
@@ -81,7 +56,7 @@
             <li class="question sample">
                 <div class="field">
                     <label class="label">Текст вопроса:</label>
-                    <input th:type="text" class="question-text" required/> <span
+                    <textarea th:type="text" class="question-text editor" required></textarea> <span
                         class="delete deleteQuestion">-</span>
                 </div>
 
