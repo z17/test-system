@@ -14,7 +14,7 @@
         <p><b>Среднее время выполнения теста:</b> [[${statistic.timeTest}]] минут</p>
         <p><b>Количество вопросов:</b> [[${statistic.questions.size()}]]</p>
         <div class="question" th:each="question : ${statistic.questions}">
-            <div class="question-text">[[${question.text}]]</div>
+            <div class="question-text" th:utext="${question.text}"></div>
             <i th:if="${question.type == T(test_system.entity.QuestionType).SINGLE}">один вариант ответа</i>
             <i th:if="${question.type == T(test_system.entity.QuestionType).MULTIPLY}">несколько вариантов ответа</i>
 

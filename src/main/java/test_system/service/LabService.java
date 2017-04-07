@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import test_system.entity.*;
 import test_system.exception.AccessDeniedException;
+import test_system.exception.NotFoundException;
+import test_system.exception.RuntimeException;
 import test_system.exception.WorkAlreadyExistsException;
 import test_system.lab.HolographyLab;
 import test_system.lab.LabData;
@@ -58,6 +60,7 @@ public class LabService {
         try {
             val filePath = getLabFileName(processingWork, file.getOriginalFilename());
             file.transferTo(new File(filePath.toAbsolutePath().toString()));
+            // todo:  make universal method with file sharing to different labs
             data.put(HolographyLab.FILE_KEY, filePath.toString());
             LabData result = runLab(processingWork.getWork().getLab(), processingWork.getId(), data);
             updateLabResult(processingWork, result);
@@ -92,19 +95,20 @@ public class LabService {
         val work = workService.getWork(workId);
 
         if (work.getLab() == Lab.EMPTY) {
-            throw new RuntimeException();
+            throw new NotFoundException("This work hasn't lab");
         }
 
-        val processingWork = workExecutionService.getProcessingWork(workId);
+        val activeWork = workExecutionService.getActiveWork();
 
-        if (processingWork == null) {
-            throw new AccessDeniedException("Access denied");
+        if (activeWork == null) {
+            throw new AccessDeniedException("Active work not found");
         }
 
-        if (processingWork.getPhase() != WorkPhase.LAB) {
+        if (!activeWork.getWork().getId().equals(workId) || activeWork.getPhase() != WorkPhase.LAB) {
             throw new WorkAlreadyExistsException();
         }
-        return processingWork;
+
+        return activeWork;
     }
 
     private LabData runLab(final Lab lab, final long executionId, final Map<String, String> data) {
@@ -114,7 +118,7 @@ public class LabService {
 
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 

@@ -9,7 +9,7 @@ import test_system.entity.WorkPhase;
 import java.util.List;
 
 public interface WorkExecutionRepository extends CrudRepository<WorkExecutionEntity, Long> {
-    List<WorkExecutionEntity> findByUserAndPhaseNot(final UserEntity user, final WorkPhase phase);
+    WorkExecutionEntity findByUserAndPhaseNot(final UserEntity user, final WorkPhase phase);
 
     WorkExecutionEntity findByUserAndWorkAndPhaseNot(final UserEntity user, final WorkEntity work, final WorkPhase phase);
 

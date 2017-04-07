@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
-import test_system.exception.CustomRuntimeException;
+import test_system.exception.AccessDeniedException;
 import test_system.exception.NotFoundException;
 import test_system.exception.WorkAlreadyExistsException;
 import test_system.repository.WorkExecutionRepository;
@@ -33,16 +33,13 @@ public class WorkExecutionService {
         return attempt;
     }
 
-    WorkExecutionEntity getProcessingWork(final long workId) {
+    WorkExecutionEntity getActiveWork() {
         val user = userService.getCurrentUser();
-        val work = workService.getWork(workId);
-        return workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
+        return workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
+
     }
 
     void update(WorkExecutionEntity workExecution) {
-        if (workExecution.getId() == null) {
-            throw new RuntimeException();
-        }
         workExecutionRepository.save(workExecution);
     }
 
@@ -50,13 +47,8 @@ public class WorkExecutionService {
         val user = userService.getCurrentUser();
         val work = workService.getWork(workId);
 
-        val currentExecutions = workExecutionRepository.findByUserAndPhaseNot(user, WorkPhase.FINISHED);
-        if (!currentExecutions.isEmpty()) {
-            if (currentExecutions.size() > 1) {
-                throw new CustomRuntimeException("Unknown Error");
-            }
-
-            val currentExecution = currentExecutions.get(0);
+        val currentExecution = getActiveWork();
+        if (currentExecution != null) {
             if (!currentExecution.getWork().equals(work) || currentExecution.getPhase() != WorkPhase.THEORY) {
                 throw new WorkAlreadyExistsException();
             } else {
@@ -76,7 +68,7 @@ public class WorkExecutionService {
         val work = workService.getWork(workId);
         val activeAttempt = workExecutionRepository.findByUserAndWorkAndPhaseNot(user, work, WorkPhase.FINISHED);
         if (activeAttempt != null) {
-            throw new CustomRuntimeException("Your work in progress yet");
+            throw new AccessDeniedException("Your work is in progress yet");
         }
 
         return workExecutionRepository.findFirstByUserAndWorkAndPhaseOrderByIdDesc(user, work, WorkPhase.FINISHED);

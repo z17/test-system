@@ -2,7 +2,7 @@ package test_system.lab;
 
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.util.ArithmeticUtils;
-import test_system.exception.CustomRuntimeException;
+import test_system.exception.RuntimeException;
 import test_system.lab.helper.BmpHelper;
 import test_system.lab.helper.FunctionalHelper;
 import test_system.lab.helper.MathHelper;
@@ -13,13 +13,13 @@ import java.util.Map;
 
 public class HolographyLab implements LabStrategy {
     public final static String FILE_KEY = "lab-file";
-    public final static String L_HOLO_KEY = "holo-l";
-    public final static String A_HOLO_KEY = "holo-a";
-    public final static String D_HOLO_KEY = "holo-d";
+    final static String L_HOLO_KEY = "holo-l";
+    final static String A_HOLO_KEY = "holo-a";
+    final static String D_HOLO_KEY = "holo-d";
 
-    public final static String L_REPAIR_KEY = "repair-l";
-    public final static String A_REPAIR_KEY = "repair-a";
-    public final static String D_REPAIR_KEY = "repair-d";
+    final static String L_REPAIR_KEY = "repair-l";
+    final static String A_REPAIR_KEY = "repair-a";
+    final static String D_REPAIR_KEY = "repair-d";
 
     private Complex[][] hc = null;
 
@@ -32,7 +32,7 @@ public class HolographyLab implements LabStrategy {
         int rows = FunctionalHelper.rows(image);
 
         if (!ArithmeticUtils.isPowerOfTwo(cols) || !ArithmeticUtils.isPowerOfTwo(rows)) {
-            throw new CustomRuntimeException("Size of image must be a power of 2");
+            throw new RuntimeException("Size of image must be a power of 2");
         }
 
         double holoL = Double.valueOf(data.get(L_HOLO_KEY)) * Math.pow(10, -9);

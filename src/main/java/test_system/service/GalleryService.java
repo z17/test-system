@@ -2,7 +2,7 @@ package test_system.service;
 
 import org.springframework.stereotype.Service;
 import test_system.data.FileData;
-import test_system.exception.CustomRuntimeException;
+import test_system.exception.RuntimeException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,7 +32,7 @@ public class GalleryService {
                     )
                     .collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new CustomRuntimeException("Error with reading files in folder", e);
+            throw new RuntimeException("Error with reading files in folder", e);
         }
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test_system.data.*;
 import test_system.entity.*;
+import test_system.lab.LabData;
 import test_system.repository.WorkAnswerRepository;
 import test_system.repository.WorkExecutionRepository;
 
@@ -95,7 +96,12 @@ public class StatisticService {
             questions.add(new QuestionData<>(question.getId(), question.getText(), question.getType(), answersData));
         }
 
-        val labData = labService.getLabData(attempt.getLabResult(), attempt.getWork().getLab());
+        final LabData labData;
+        if (attempt.getLabResult() != null) {
+            labData = labService.getLabData(attempt.getLabResult(), attempt.getWork().getLab());
+        } else {
+            labData = null;
+        }
         return new AttemptData<>(attempt, questions, labData, attempt.getWork().getLab().getResultTemplate());
     }
 

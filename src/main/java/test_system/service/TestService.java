@@ -8,7 +8,6 @@ import test_system.data.AnswerData;
 import test_system.data.QuestionData;
 import test_system.entity.*;
 import test_system.exception.AccessDeniedException;
-import test_system.exception.CustomRuntimeException;
 import test_system.exception.NotFoundException;
 import test_system.exception.WorkAlreadyExistsException;
 import test_system.repository.AnswerRepository;
@@ -64,16 +63,17 @@ public class TestService {
         val test = getTestByWorkId(workId);
         val work = workService.getWork(workId);
 
-        val workExecution = workExecutionService.getProcessingWork(workId);
-        if (workExecution == null) {
-            throw new AccessDeniedException("Access is denied");
+        val activeWork = workExecutionService.getActiveWork();
+
+        if (activeWork == null) {
+            throw new AccessDeniedException("Active work not found");
         }
 
-        if (workExecution.getPhase() != WorkPhase.TEST) {
+        if (!activeWork.getWork().getId().equals(workId) || activeWork.getPhase() != WorkPhase.TEST) {
             throw new WorkAlreadyExistsException();
         }
 
-        final List<WorkAnswerEntity> answers = processTestResultData(workExecution, testResultData);
+        final List<WorkAnswerEntity> answers = processTestResultData(activeWork, testResultData);
         workAnswerRepository.save(answers);
 
         List<Long> answerIds = answers.stream().map(WorkAnswerEntity::getAnswerId).collect(Collectors.toList());
@@ -91,18 +91,18 @@ public class TestService {
         // todo: refactor this
         String url;
         if (work.getLab() != Lab.EMPTY && work.getLab() != null) {
-            workExecution.setPhase(WorkPhase.LAB);
+            activeWork.setPhase(WorkPhase.LAB);
             url = "work/" + workId + "/lab";
         } else {
-            workExecution.setPhase(WorkPhase.FINISHED);
+            activeWork.setPhase(WorkPhase.FINISHED);
             url = "work/" + workId + "/finish";
         }
 
-        workExecution.setCorrectQuestionsAmount(correctQuestionCount);
-        workExecution.setQuestionsAmount(test.getQuestions().size());
-        workExecution.setTestEndTime(new Timestamp(System.currentTimeMillis()));
+        activeWork.setCorrectQuestionsAmount(correctQuestionCount);
+        activeWork.setQuestionsAmount(test.getQuestions().size());
+        activeWork.setTestEndTime(new Timestamp(System.currentTimeMillis()));
 
-        workExecutionService.update(workExecution);
+        workExecutionService.update(activeWork);
 
         return url;
     }
@@ -234,22 +234,26 @@ public class TestService {
     }
 
     private void startTest(final long workId) {
-        WorkExecutionEntity workExecution = workExecutionService.getProcessingWork(workId);
+        val activeWork = workExecutionService.getActiveWork();
 
-        if (workExecution == null) {
-            throw new AccessDeniedException("Access is denied");
+        if (activeWork == null) {
+            throw new AccessDeniedException("Active work not found");
         }
 
-        if (workExecution.getPhase() == WorkPhase.TEST) {
-            return;
-        }
-
-        if (workExecution.getPhase() != WorkPhase.THEORY) {
+        if (!activeWork.getWork().getId().equals(workId)) {
             throw new WorkAlreadyExistsException();
         }
 
-        workExecution.setPhase(WorkPhase.TEST);
-        workExecution.setTestStartTime(new Timestamp(System.currentTimeMillis()));
-        workExecutionService.update(workExecution);
+        if (activeWork.getPhase() == WorkPhase.TEST) {
+            return;
+        }
+
+        if (activeWork.getPhase() != WorkPhase.THEORY) {
+            throw new WorkAlreadyExistsException();
+        }
+
+        activeWork.setPhase(WorkPhase.TEST);
+        activeWork.setTestStartTime(new Timestamp(System.currentTimeMillis()));
+        workExecutionService.update(activeWork);
     }
 }

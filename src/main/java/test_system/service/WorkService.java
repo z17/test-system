@@ -122,4 +122,14 @@ public class WorkService {
         );
 
     }
+
+    public String getCurrentWorkUrl() {
+        val activeWork = workExecutionService.getActiveWork();
+
+        if (activeWork == null) {
+            throw new NotFoundException("Active work not found");
+        }
+
+        return activeWork.getWork().getId() + "/" + activeWork.getPhase().getUrl();
+    }
 }

@@ -65,4 +65,10 @@ public class WorkController extends AbstractController {
         model.addAttribute("data", workService.finishPage(id));
         return run(Template.TEST_RESULT_PAGE_TEMPLATE, model);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/work/current", method = RequestMethod.GET)
+    public String currentWork() {
+        return "redirect:/work/" + workService.getCurrentWorkUrl();
+    }
 }
