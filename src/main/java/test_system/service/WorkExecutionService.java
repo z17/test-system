@@ -7,6 +7,7 @@ import test_system.entity.WorkExecutionEntity;
 import test_system.entity.WorkPhase;
 import test_system.exception.CustomRuntimeException;
 import test_system.exception.NotFoundException;
+import test_system.exception.WorkAlreadyExistsException;
 import test_system.repository.WorkExecutionRepository;
 
 @Service
@@ -57,7 +58,7 @@ public class WorkExecutionService {
 
             val currentExecution = currentExecutions.get(0);
             if (!currentExecution.getWork().equals(work) || currentExecution.getPhase() != WorkPhase.THEORY) {
-                throw new CustomRuntimeException("Some work already started");
+                throw new WorkAlreadyExistsException();
             } else {
                 return currentExecution;
             }

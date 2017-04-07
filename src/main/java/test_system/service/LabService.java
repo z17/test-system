@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import test_system.entity.*;
 import test_system.exception.AccessDeniedException;
+import test_system.exception.WorkAlreadyExistsException;
 import test_system.lab.HolographyLab;
 import test_system.lab.LabData;
 import test_system.lab.LabStrategy;
@@ -101,7 +102,7 @@ public class LabService {
         }
 
         if (processingWork.getPhase() != WorkPhase.LAB) {
-            throw new AccessDeniedException("Access denied");
+            throw new WorkAlreadyExistsException();
         }
         return processingWork;
     }

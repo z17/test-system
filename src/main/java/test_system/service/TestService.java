@@ -10,6 +10,7 @@ import test_system.entity.*;
 import test_system.exception.AccessDeniedException;
 import test_system.exception.CustomRuntimeException;
 import test_system.exception.NotFoundException;
+import test_system.exception.WorkAlreadyExistsException;
 import test_system.repository.AnswerRepository;
 import test_system.repository.QuestionRepository;
 import test_system.repository.TestRepository;
@@ -69,7 +70,7 @@ public class TestService {
         }
 
         if (workExecution.getPhase() != WorkPhase.TEST) {
-            throw new AccessDeniedException("Access is denied");
+            throw new WorkAlreadyExistsException();
         }
 
         final List<WorkAnswerEntity> answers = processTestResultData(workExecution, testResultData);
@@ -244,7 +245,7 @@ public class TestService {
         }
 
         if (workExecution.getPhase() != WorkPhase.THEORY) {
-            throw new CustomRuntimeException("This test already started");
+            throw new WorkAlreadyExistsException();
         }
 
         workExecution.setPhase(WorkPhase.TEST);
