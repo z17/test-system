@@ -9,6 +9,6 @@
 
         <a th:if="${user != null}" href="/logout" class="menu-item right">Выход</a>
         <a th:if="${user} == null" href="/login" class="menu-item right">Вход</a>
-        <span th:if="${user} != null" class="menu-item right">Привет, <a href="/user-edit">[[${user.name}]]</a></span>
+        <span th:if="${user} != null" class="menu-item right">Здравствуйте, <a href="/user-edit">[[${user.name}]]</a></span>
     </div>
 </div>
